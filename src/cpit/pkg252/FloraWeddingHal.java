@@ -7,7 +7,9 @@ public class FloraWeddingHal {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Customer customerManager = new Customer();
+        
+        Customer customerManager = new Customer(0, "defaultPassword", "defaultName", "defaultEmail", "defaultPhone");
+        //Customer customerManager = new Customer();
         Package packages = new Package();
 
         while (true) {
