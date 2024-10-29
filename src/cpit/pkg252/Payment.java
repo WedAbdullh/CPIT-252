@@ -8,14 +8,15 @@ public class Payment {
     // Attributes
     private double price;
     private Date paymentDate;
-    private String paymentMethod;
+    //private String paymentMethod;
+    private PaymentStrategy paymentStrategy;
     private String paymentStatus;
 
     // Constructor
-    public Payment(double price, Date paymentDate, String paymentMethod, String paymentStatus) {
+    public Payment(double price, Date paymentDate, PaymentStrategy paymentStrategy, String paymentStatus) {
         this.price = price;
         this.paymentDate = paymentDate;
-        this.paymentMethod = paymentMethod;
+        this.paymentStrategy = paymentStrategy;
         this.paymentStatus = paymentStatus;
     }
 
@@ -36,14 +37,6 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
     public String getPaymentStatus() {
         return paymentStatus;
     }
@@ -53,6 +46,11 @@ public class Payment {
     }
 
     // Methods
+    //Strategy design pattern 
+    public void processPayment() {
+        paymentStrategy.pay(this.price);
+    }
+    
     public void createFinePayment(double fineAmount) {
         this.price += fineAmount;
         System.out.println("Fine added to payment. New total price: " + this.price);
@@ -60,7 +58,7 @@ public class Payment {
 
     public boolean validate() {
         // Validation logic, e.g., check if payment details are correct
-        if (this.paymentMethod != null && !this.paymentMethod.isEmpty() && this.price > 0) {
+        if (this.price > 0) {
             System.out.println("Payment validated successfully.");
             return true;
         } else {
@@ -94,7 +92,6 @@ public class Payment {
     System.out.println("--------------------------------------------------");
     System.out.printf("%-20s: %s%n", "Price", String.format("$%.2f", this.price));
     System.out.printf("%-20s: %s%n", "Payment Date", this.paymentDate.toString());
-    System.out.printf("%-20s: %s%n", "Payment Method", this.paymentMethod);
     System.out.printf("%-20s: %s%n", "Payment Status", this.paymentStatus);
     System.out.println("--------------------------------------------------");
     System.out.println("                   Thank you!                     ");
