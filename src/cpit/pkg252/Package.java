@@ -1,19 +1,20 @@
-
 package cpit.pkg252;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Package {
+public abstract class Package {
 
-    private String packageId;
-    private String packageDescription;
-    private String packageName;
-    private double packagePrice;
-    private List <String> includedServices = new ArrayList <String> ();
+    protected String packageId;
+    protected String packageDescription;
+    protected String packageName;
+    protected double packagePrice;
+    protected List<String> includedServices = new ArrayList<>();
 
     public Package() {
     }
+    
+    public abstract String getDetails();
 
     public void setPackageId(String packageId) {
         this.packageId = packageId;
@@ -40,7 +41,7 @@ public class Package {
         packagePrice -= price;
         return includedServices.remove(service);
     }
-    
+
     public String getPackageDescription() {
         return packageDescription;
     }
@@ -60,20 +61,24 @@ public class Package {
     public double getPackagePrice() {
         return packagePrice;
     }
-    
+
     @Override
     public String toString() {
-        String s = "";
-        s = s + packageName + "; \n";
-        s = s + packageDescription + " \n";
-        s = s + "Price: " + packagePrice + " \n";
-        s = s + "Included Services: \n";
-        
-        for (String service: includedServices){
-            s = s + service + " \n";
+        StringBuilder s = new StringBuilder();
+        s.append(packageName).append("; \n");
+        s.append(packageDescription).append(" \n");
+        s.append("Price: ").append(packagePrice).append(" \n");
+        s.append("Included Services: \n");
+
+        for (String service : includedServices) {
+            s.append(service).append(" \n");
         }
-        
-        return s;
+
+        return s.toString();
     }
 }
+
+
+
+
 
