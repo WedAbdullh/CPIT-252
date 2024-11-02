@@ -298,6 +298,15 @@ public class FloraWeddingHall {
 
     private static void viewBookings() {
         System.out.println("Viewing bookings...");
+         // Proxy instance with only basic booking data
+        BookingProxy proxy = new BookingProxy(101, "Pending", 1200.00);
+
+        // Accessing basic info without triggering full database load
+        System.out.println("Booking Status: " + proxy.getBookingStatus());
+        System.out.println("Total Price: " + proxy.getTotalPrice());
+
+        // Accessing full details, which triggers lazy loading
+        proxy.viewBooking();
     }
 
     private static void addNewPackage() {
