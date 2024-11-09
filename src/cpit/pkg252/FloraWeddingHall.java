@@ -9,6 +9,7 @@ public class FloraWeddingHall {
 
     // Scanner object for user input
     private static final Scanner scanner = new Scanner(System.in);
+    private static AlertSystem alertSystem = new AlertSystem();
 
     // Method to display the initial entry menu for user actions
     private static void showEntryMenu() {
@@ -48,21 +49,42 @@ public class FloraWeddingHall {
         }
     }
 
-    // Method to register a new customer
     private static void registerNewCustomer() {
-        // Create a new Customer object with default values
-        Customer newCustomer = new Customer("", "", "", "");
+        Scanner scanner = new Scanner(System.in);
 
-        // Attempt to register the new customer and show the main menu if successful
-        if (newCustomer.registerCustomer(scanner)) {
-            showMainMenu();
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter your phone number: ");
+        String phone = scanner.nextLine();
+
+        System.out.print("Enter your email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter your password: ");
+        String password = scanner.nextLine();
+
+        // Validate the customer input
+        if (Customer.validateCustomer(name, phone, email, password)) {
+            // Create a new Customer object with provided values
+            Customer newCustomer = new Customer(name, phone, email, password);
+
+            // Attempt to register the new customer and show the main menu if successful
+            if (newCustomer.registerCustomer()) {
+                alertSystem.attach(newCustomer); // Attach customer to alert system
+                System.out.println("Registration successful!"); // Optional: Show success message
+                showMainMenu();
+            } else {
+                System.out.println("Registration failed. Please try again.");
+            }
         } else {
-            System.out.println("Registration failed. Returning to the main menu.");
+            System.out.println("Invalid input. Please check your details and try again.");
         }
     }
 
-    // Method to handle customer or manager login
-    private static void handleLogin() {
+
+// Method to handle customer or manager login
+private static void handleLogin() {
         // Ask user to choose their type (Customer or Manager)
         String userType = chooseUserType();
 
@@ -70,18 +92,32 @@ public class FloraWeddingHall {
         if ("Customer".equals(userType)) {
             // Login as a Customer
             Customer existingCustomer = new Customer("", "", "", "");
-            if (existingCustomer.loginCustomer(scanner) == null) {
+            Customer loggedInCustomer = existingCustomer.loginCustomer(scanner);
+
+            if (loggedInCustomer == null) {
                 System.out.println("Login failed. Returning to the main menu.");
             } else {
+                // Attach customer to alert system and retrieve alerts from the database
+                alertSystem.attach(loggedInCustomer);
+
+                // Retrieve and display alerts for the logged-in customer
+                String alerts = Database.getCustomerAlerts(loggedInCustomer.getEmail());
+                if (alerts != null && !alerts.isEmpty()) {
+                    System.out.println("Alerts for you: " + alerts);
+                } else {
+                    System.out.println("No new alerts.");
+                }
+
                 showMainMenu();  // Show the main menu if login is successful
             }
         } else if ("Manager".equals(userType)) {
             // Login as a Manager
-            Manager manager = new Manager("", "", "", "");
-            if (manager.loginManager(scanner) == null) {
+            Manager loggedInManager = Manager.loginManager(scanner);
+
+            if (loggedInManager == null) {
                 System.out.println("Login failed. Returning to the main menu.");
             } else {
-                showMainMenu();  // Show the main menu if login is successful
+                showManagerMenu();  // Show the manager menu if login is successful
             }
         }
     }
@@ -151,16 +187,28 @@ public class FloraWeddingHall {
             }
         }
     }
+// Method to display the manager menu
 
-    // Method to display the manager menu
     private static void showManagerMenu() {
+        AlertSystem alertSystem = new AlertSystem(); // Create the alert system
+
+//        // Get the singleton instance of Manager (login is handled here)
+//        Manager loggedInManager = Manager.getInstance(scanner);  // Retrieve the singleton instance, or use the logged-in manager
+//
+//        // Check if login was successful
+//        if (loggedInManager == null) {
+//            System.out.println("Login failed. Returning to the main menu.");
+//            return;  // Return to the main menu if login fails
+//        }
+        // Proceed with the menu if login is successful
         while (true) {
             // Display manager menu options
             System.out.println("\n1. View Packages");
             System.out.println("2. View Customers");
             System.out.println("3. View Bookings");
             System.out.println("4. Add New Package");
-            System.out.println("5. Logout");
+            System.out.println("5. Send Alert");
+            System.out.println("6. Logout");
             System.out.print("Select an option: ");
 
             try {
@@ -182,6 +230,10 @@ public class FloraWeddingHall {
                         addNewPackage();  // Add a new package (functionality to be implemented)
                         break;
                     case 5:
+                        // Send alert using the Singleton instance of Manager
+                       // loggedInManager.sendAlert(alertSystem, scanner);  // Send alert to all customers
+                        break;
+                    case 6:
                         // Logout and return to the entry menu
                         System.out.println("Logging out...");
                         return;  // Return to entry menu
@@ -284,21 +336,26 @@ public class FloraWeddingHall {
     }
 
     public static void main(String[] args) throws SQLException {
-        Database.setupDatabase();
+        try {
+            Database.setupDatabase();
+        } catch (SQLException e) {
+            System.out.println("Error setting up the database.");
+        }
+
         System.out.println("Welcome to Flora Wedding Hall!");
 
         // Display the initial entry menu
         showEntryMenu();
     }
 
-    //needed methods
     private static void viewCustomers() {
-        System.out.println("Viewing customers...");
+        System.out.println("Viewing all registered customers...");
+        Database.viewCustomers();  // Calls the viewCustomers method from the Database class
     }
 
     private static void viewBookings() {
         System.out.println("Viewing bookings...");
-         // Proxy instance with only basic booking data
+        // Proxy instance with only basic booking data
         BookingProxy proxy = new BookingProxy(101, "Pending", 1200.00);
 
         // Accessing basic info without triggering full database load
