@@ -177,14 +177,6 @@ public class FloraWeddingHall {
 
     private static void showManagerMenu() {
 
-//        // Get the singleton instance of Manager (login is handled here)
-//        Manager loggedInManager = Manager.getInstance(scanner);  // Retrieve the singleton instance, or use the logged-in manager
-//
-//        // Check if login was successful
-//        if (loggedInManager == null) {
-//            System.out.println("Login failed. Returning to the main menu.");
-//            return;  // Return to the main menu if login fails
-//        }
         // Proceed with the menu if login is successful
         while (true) {
             // Display manager menu options

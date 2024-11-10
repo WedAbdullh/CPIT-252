@@ -139,41 +139,6 @@ public class Database {
         }
     }
 
-    public static String getCustomerAlerts(String email) {
-        String selectQuery = "SELECT alerts FROM Customer WHERE email = ?";
-
-        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString("alerts");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static boolean updateCustomerAlert(String email, String alertMessage) {
-        String updateQuery = "UPDATE Customer SET alerts = ? WHERE email = ?";
-
-        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            // Get current alerts and append the new alert
-            String existingAlerts = getCustomerAlerts(email);
-            String updatedAlerts = existingAlerts == null ? alertMessage : existingAlerts + "; " + alertMessage;
-
-            pstmt.setString(1, updatedAlerts);
-            pstmt.setString(2, email);
-
-            int rowsUpdated = pstmt.executeUpdate();
-            return rowsUpdated > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     // Check if an email already exists
     public static boolean emailExists(String email) {
         String checkQuery = "SELECT email FROM Customer WHERE email = ?";

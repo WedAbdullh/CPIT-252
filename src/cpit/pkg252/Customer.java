@@ -144,14 +144,6 @@ public class Customer extends User {
         return true;
     }
 
-
-    public String getAlert() {
-        return alert;
-    }
-
-    public void setAlert(String alert) {
-        this.alert = alert;
-    }
 }
 
 
