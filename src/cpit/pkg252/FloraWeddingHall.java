@@ -9,7 +9,6 @@ public class FloraWeddingHall {
 
     // Scanner object for user input
     private static final Scanner scanner = new Scanner(System.in);
-    private static AlertSystem alertSystem = new AlertSystem();
 
     // Method to display the initial entry menu for user actions
     private static void showEntryMenu() {
@@ -71,7 +70,6 @@ public class FloraWeddingHall {
 
             // Attempt to register the new customer and show the main menu if successful
             if (newCustomer.registerCustomer()) {
-                alertSystem.attach(newCustomer); // Attach customer to alert system
                 System.out.println("Registration successful!"); // Optional: Show success message
                 showMainMenu();
             } else {
@@ -82,9 +80,8 @@ public class FloraWeddingHall {
         }
     }
 
-
 // Method to handle customer or manager login
-private static void handleLogin() {
+    private static void handleLogin() {
         // Ask user to choose their type (Customer or Manager)
         String userType = chooseUserType();
 
@@ -97,22 +94,11 @@ private static void handleLogin() {
             if (loggedInCustomer == null) {
                 System.out.println("Login failed. Returning to the main menu.");
             } else {
-                // Attach customer to alert system and retrieve alerts from the database
-                alertSystem.attach(loggedInCustomer);
-
-                // Retrieve and display alerts for the logged-in customer
-                String alerts = Database.getCustomerAlerts(loggedInCustomer.getEmail());
-                if (alerts != null && !alerts.isEmpty()) {
-                    System.out.println("Alerts for you: " + alerts);
-                } else {
-                    System.out.println("No new alerts.");
-                }
-
                 showMainMenu();  // Show the main menu if login is successful
             }
         } else if ("Manager".equals(userType)) {
-            // Login as a Manager
-            Manager loggedInManager = Manager.loginManager(scanner);
+            // Login as a Manager using the Singleton instance
+            SingletonManager loggedInManager = SingletonManager.getInstance(scanner);
 
             if (loggedInManager == null) {
                 System.out.println("Login failed. Returning to the main menu.");
@@ -190,7 +176,6 @@ private static void handleLogin() {
 // Method to display the manager menu
 
     private static void showManagerMenu() {
-        AlertSystem alertSystem = new AlertSystem(); // Create the alert system
 
 //        // Get the singleton instance of Manager (login is handled here)
 //        Manager loggedInManager = Manager.getInstance(scanner);  // Retrieve the singleton instance, or use the logged-in manager
@@ -207,8 +192,7 @@ private static void handleLogin() {
             System.out.println("2. View Customers");
             System.out.println("3. View Bookings");
             System.out.println("4. Add New Package");
-            System.out.println("5. Send Alert");
-            System.out.println("6. Logout");
+            System.out.println("5. Logout");
             System.out.print("Select an option: ");
 
             try {
@@ -230,10 +214,6 @@ private static void handleLogin() {
                         addNewPackage();  // Add a new package (functionality to be implemented)
                         break;
                     case 5:
-                        // Send alert using the Singleton instance of Manager
-                       // loggedInManager.sendAlert(alertSystem, scanner);  // Send alert to all customers
-                        break;
-                    case 6:
                         // Logout and return to the entry menu
                         System.out.println("Logging out...");
                         return;  // Return to entry menu

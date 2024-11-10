@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Customer extends User implements Observer {
+public class Customer extends User {
 
     private String name;
     private String phone;
@@ -152,9 +152,6 @@ public class Customer extends User implements Observer {
     public void setAlert(String alert) {
         this.alert = alert;
     }
-
-    @Override
-    public void update(String message) {
-        System.out.println("Notification for " + this.name + ": " + message);
-    }
 }
+
+

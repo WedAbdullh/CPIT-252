@@ -78,7 +78,6 @@ public class Database {
             String insertRecordsQuery = "INSERT INTO Manager (name, phone, email, password) VALUES "
                     + "('Ali Al-Qahtani', '0501234567', 'ali.qahtani@gmail.com', 'password123')";
             statement.executeUpdate(insertRecordsQuery);
-            System.out.println("Manager record inserted successfully.");
         } else {
             System.out.println("A manager already exists. Insertion skipped.");
         }
