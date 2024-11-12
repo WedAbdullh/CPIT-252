@@ -11,7 +11,7 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "lougin12345";
+    private static final String PASSWORD = "W12345678";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD); // Open a new connection each time
@@ -152,4 +152,17 @@ public class Database {
             return false;
         }
     }
+    
+    public static boolean loginCustomer(String email, String password) {
+    String loginQuery = "SELECT email, password FROM Customer WHERE email = ? AND password = ?";
+    try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(loginQuery)) {
+        pstmt.setString(1, email);
+        pstmt.setString(2, password);
+        ResultSet rs = pstmt.executeQuery();
+        return rs.next(); // If a record is found, login is successful
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

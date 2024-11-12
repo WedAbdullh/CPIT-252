@@ -10,103 +10,104 @@ public class FloraWeddingHall {
     // Scanner object for user input
     private static final Scanner scanner = new Scanner(System.in);
 
-    // Method to display the initial entry menu for user actions
-    private static void showEntryMenu() {
-        while (true) {
-            // Display menu options
-            System.out.println("\n1. Register");
-            System.out.println("2. Login");
-            System.out.println("3. Exit");
-            System.out.print("Select an option: ");
+    
+     //Method to display the initial entry menu for user actions
+//    private static void showEntryMenu() {
+//        while (true) {
+//            // Display menu options
+//            System.out.println("\n1. Register");
+//            System.out.println("2. Login");
+//            System.out.println("3. Exit");
+//            System.out.print("Select an option: ");
+//
+//            try {
+//                // Get user choice
+//                int choice = scanner.nextInt();
+//                scanner.nextLine();  // Consume newline
+//
+//                // Execute the corresponding action based on user choice
+//                switch (choice) {
+//                    case 1:
+//                        new Customer().showSignupWindow();  // Register a new customer
+//                        break;
+//                    case 2:
+//                        new Customer().showLoginWindow();  // Handle user login
+//                        break;
+//                    case 3:
+//                        // Exit the application
+//                        System.out.println("Thank you for visiting Flora Wedding Hall!");
+//                        System.exit(0);
+//                    default:
+//                        // Handle invalid option
+//                        System.out.println("Invalid option. Please try again.");
+//                }
+//            } catch (InputMismatchException e) {
+//                // Handle non-integer input
+//                System.out.println("Please enter a valid integer option.");
+//                scanner.nextLine();  // Clear invalid input
+//            }
+//        }
+//    }
 
-            try {
-                // Get user choice
-                int choice = scanner.nextInt();
-                scanner.nextLine();  // Consume newline
-
-                // Execute the corresponding action based on user choice
-                switch (choice) {
-                    case 1:
-                        registerNewCustomer();  // Register a new customer
-                        break;
-                    case 2:
-                        handleLogin();  // Handle user login
-                        break;
-                    case 3:
-                        // Exit the application
-                        System.out.println("Thank you for visiting Flora Wedding Hall!");
-                        System.exit(0);
-                    default:
-                        // Handle invalid option
-                        System.out.println("Invalid option. Please try again.");
-                }
-            } catch (InputMismatchException e) {
-                // Handle non-integer input
-                System.out.println("Please enter a valid integer option.");
-                scanner.nextLine();  // Clear invalid input
-            }
-        }
-    }
-
-    private static void registerNewCustomer() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter your name: ");
-        String name = scanner.nextLine();
-
-        System.out.print("Enter your phone number: ");
-        String phone = scanner.nextLine();
-
-        System.out.print("Enter your email: ");
-        String email = scanner.nextLine();
-
-        System.out.print("Enter your password: ");
-        String password = scanner.nextLine();
-
-        // Validate the customer input
-        if (Customer.validateCustomer(name, phone, email, password)) {
-            // Create a new Customer object with provided values
-            Customer newCustomer = new Customer(name, phone, email, password);
-
-            // Attempt to register the new customer and show the main menu if successful
-            if (newCustomer.registerCustomer()) {
-                System.out.println("Registration successful!"); // Optional: Show success message
-                showMainMenu();
-            } else {
-                System.out.println("Registration failed. Please try again.");
-            }
-        } else {
-            System.out.println("Invalid input. Please check your details and try again.");
-        }
-    }
+//    private static void registerNewCustomer() {
+//        Scanner scanner = new Scanner(System.in);
+//
+//        System.out.print("Enter your name: ");
+//        String name = scanner.nextLine();
+//
+//        System.out.print("Enter your phone number: ");
+//        String phone = scanner.nextLine();
+//
+//        System.out.print("Enter your email: ");
+//        String email = scanner.nextLine();
+//
+//        System.out.print("Enter your password: ");
+//        String password = scanner.nextLine();
+//
+//        // Validate the customer input
+//        if (Customer.validateCustomer(name, phone, email, password)) {
+//            // Create a new Customer object with provided values
+//            Customer newCustomer = new Customer(name, phone, email, password);
+//
+//            // Attempt to register the new customer and show the main menu if successful
+//            if (newCustomer.registerCustomer()) {
+//                System.out.println("Registration successful!"); // Optional: Show success message
+//                showMainMenu();
+//            } else {
+//                System.out.println("Registration failed. Please try again.");
+//            }
+//        } else {
+//            System.out.println("Invalid input. Please check your details and try again.");
+//        }
+//    }
 
 // Method to handle customer or manager login
-    private static void handleLogin() {
-        // Ask user to choose their type (Customer or Manager)
-        String userType = chooseUserType();
-
-        // Handle login based on the selected user type
-        if ("Customer".equals(userType)) {
-            // Login as a Customer
-            Customer existingCustomer = new Customer("", "", "", "");
-            Customer loggedInCustomer = existingCustomer.loginCustomer(scanner);
-
-            if (loggedInCustomer == null) {
-                System.out.println("Login failed. Returning to the main menu.");
-            } else {
-                showMainMenu();  // Show the main menu if login is successful
-            }
-        } else if ("Manager".equals(userType)) {
-            // Login as a Manager using the Singleton instance
-            SingletonManager loggedInManager = SingletonManager.getInstance(scanner);
-
-            if (loggedInManager == null) {
-                System.out.println("Login failed. Returning to the main menu.");
-            } else {
-                showManagerMenu();  // Show the manager menu if login is successful
-            }
-        }
-    }
+//    private static void handleLogin() {
+//        // Ask user to choose their type (Customer or Manager)
+//        String userType = chooseUserType();
+//
+//        // Handle login based on the selected user type
+//        if ("Customer".equals(userType)) {
+//            // Login as a Customer
+//            Customer existingCustomer = new Customer("", "", "", "");
+//            Customer loggedInCustomer = existingCustomer.loginCustomer(scanner);
+//
+//            if (loggedInCustomer == null) {
+//                System.out.println("Login failed. Returning to the main menu.");
+//            } else {
+//                showMainMenu();  // Show the main menu if login is successful
+//            }
+//        } else if ("Manager".equals(userType)) {
+//            // Login as a Manager using the Singleton instance
+//            SingletonManager loggedInManager = SingletonManager.getInstance(scanner);
+//
+//            if (loggedInManager == null) {
+//                System.out.println("Login failed. Returning to the main menu.");
+//            } else {
+//                showManagerMenu();  // Show the manager menu if login is successful
+//            }
+//        }
+//    }
 
     // Method to prompt the user to select their type for login
     private static String chooseUserType() {
@@ -138,41 +139,41 @@ public class FloraWeddingHall {
     }
 
     // Method to display the main menu for customers
-    private static void showMainMenu() {
-        while (true) {
-            // Display main menu options
-            System.out.println("\n1. View Packages");
-            System.out.println("2. Book a Hall");
-            System.out.println("3. Logout");
-            System.out.print("Select an option: ");
-
-            try {
-                int choice = scanner.nextInt();
-                scanner.nextLine();  // Consume newline
-
-                // Execute corresponding action based on choice
-                switch (choice) {
-                    case 1:
-                        viewPackages();  // View available packages
-                        break;
-                    case 2:
-                        bookHall();  // Book a hall (functionality to be implemented)
-                        break;
-                    case 3:
-                        // Logout and return to the entry menu
-                        System.out.println("Logging out...");
-                        return;  // Return to entry menu
-                    default:
-                        // Handle invalid option
-                        System.out.println("Invalid option. Please try again.");
-                }
-            } catch (InputMismatchException e) {
-                // Handle non-integer input
-                System.out.println("Please enter a valid integer.");
-                scanner.nextLine();  // Clear invalid input
-            }
-        }
-    }
+//    private static void showMainMenu() {
+//        while (true) {
+//            // Display main menu options
+//            System.out.println("\n1. View Packages");
+//            System.out.println("2. Book a Hall");
+//            System.out.println("3. Logout");
+//            System.out.print("Select an option: ");
+//
+//            try {
+//                int choice = scanner.nextInt();
+//                scanner.nextLine();  // Consume newline
+//
+//                // Execute corresponding action based on choice
+//                switch (choice) {
+//                    case 1:
+//                        viewPackages();  // View available packages
+//                        break;
+//                    case 2:
+//                        bookHall();  // Book a hall (functionality to be implemented)
+//                        break;
+//                    case 3:
+//                        // Logout and return to the entry menu
+//                        System.out.println("Logging out...");
+//                        return;  // Return to entry menu
+//                    default:
+//                        // Handle invalid option
+//                        System.out.println("Invalid option. Please try again.");
+//                }
+//            } catch (InputMismatchException e) {
+//                // Handle non-integer input
+//                System.out.println("Please enter a valid integer.");
+//                scanner.nextLine();  // Clear invalid input
+//            }
+//        }
+//    }
 // Method to display the manager menu
 
     private static void showManagerMenu() {
@@ -194,7 +195,7 @@ public class FloraWeddingHall {
                 // Execute corresponding action based on choice
                 switch (choice) {
                     case 1:
-                        viewPackages();  // View available packages
+                        new PackageViewerGUI();  // View available packages
                         break;
                     case 2:
                         viewCustomers();  // View customer details
@@ -222,34 +223,34 @@ public class FloraWeddingHall {
     }
 
     // Method to view available packages
-    private static void viewPackages() {
-        while (true) {
-            // Display available package options
-            System.out.println("\nAvailable Packages:");
-            System.out.println("1. Wedding");
-            System.out.println("2. Corporate");
-            System.out.println("3. Birthday");
-            System.out.println("4. Cancel");
-            System.out.print("Type the package name to view details: ");
-
-            String packageType = scanner.nextLine().trim();  // Get user input
-
-            // Check if user wants to cancel
-            if ("Cancel".equalsIgnoreCase(packageType)) {
-                return;  // Return to previous menu
-            }
-
-            if (packageType.equalsIgnoreCase("Wedding") | packageType.equalsIgnoreCase("Corporate") | packageType.equalsIgnoreCase("Birthday")) {
-                // Attempt to create a package based on user input
-                Package selectedPackage = PackageFactory.createPackage(packageType);
-                System.out.println(selectedPackage.getDetails());  // Display package details
-                break;  // Exit the loop after successful package view
-            } else {
-                // Handle invalid package type input
-                System.out.println("Invalid package type. Please enter a valid package name.");
-            }
-        }
-    }
+//    private static void viewPackages() {
+//        while (true) {
+//            // Display available package options
+//            System.out.println("\nAvailable Packages:");
+//            System.out.println("1. Wedding");
+//            System.out.println("2. Corporate");
+//            System.out.println("3. Birthday");
+//            System.out.println("4. Cancel");
+//            System.out.print("Type the package name to view details: ");
+//
+//            String packageType = scanner.nextLine().trim();  // Get user input
+//
+//            // Check if user wants to cancel
+//            if ("Cancel".equalsIgnoreCase(packageType)) {
+//                return;  // Return to previous menu
+//            }
+//
+//            if (packageType.equalsIgnoreCase("Wedding") | packageType.equalsIgnoreCase("Corporate") | packageType.equalsIgnoreCase("Birthday")) {
+//                // Attempt to create a package based on user input
+//                Package selectedPackage = PackageFactory.createPackage(packageType);
+//                System.out.println(selectedPackage.getDetails());  // Display package details
+//                break;  // Exit the loop after successful package view
+//            } else {
+//                // Handle invalid package type input
+//                System.out.println("Invalid package type. Please enter a valid package name.");
+//            }
+//        }
+//    }
 
     // Placeholder method for hall booking functionality
     private static void bookHall() {
@@ -317,7 +318,9 @@ public class FloraWeddingHall {
         System.out.println("Welcome to Flora Wedding Hall!");
 
         // Display the initial entry menu
-        showEntryMenu();
+        //showEntryMenu();
+        
+        new Customer().showSignupWindow() ;
     }
 
     private static void viewCustomers() {
@@ -341,4 +344,7 @@ public class FloraWeddingHall {
     private static void addNewPackage() {
         System.out.println("Adding new package...");
     }
+    
+   
+    
 }
