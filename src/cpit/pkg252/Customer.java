@@ -1,9 +1,21 @@
 package cpit.pkg252;
 
 import static cpit.pkg252.Database.getConnection;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +23,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,11 +40,20 @@ public class Customer extends User {
     Database db= new Database();
         
         public  void showSignupWindow() {
+       
+        
         JFrame frame = new JFrame("Customer Signup");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
-        frame.setLayout(new GridLayout(6, 2));
+        frame.setSize(1383, 768);
+        frame.setLayout(null); // Disable layout manager
+        
+        //Background Image
+        BackgroundPanel backgroundPanel = new BackgroundPanel("SignUp.png");    
+        frame.setContentPane(backgroundPanel);  
+        
+        
 
+        // Create labels and text fields with appropriate styling and positioning
         JLabel nameLabel = new JLabel("Name:");
         JTextField nameField = new JTextField();
         JLabel phoneLabel = new JLabel("Phone:");
@@ -41,9 +63,24 @@ public class Customer extends User {
         JLabel passwordLabel = new JLabel("Password:");
         JPasswordField passwordField = new JPasswordField();
 
-        JButton signupButton = new JButton("Sign Up");
-        JButton switchToLoginButton = new JButton("Already have an account? Login");
+        // Set positions and dimensions directly
+        // Assuming the bottom right margin space and components dimensions
+        int xPosition = 870; // Starting x position for labels
+        int yStart = 250; // Starting y position for the first label and field
 
+        nameLabel.setBounds(xPosition, yStart, 80, 30);
+        nameField.setBounds(xPosition + 85, yStart, 200, 30);
+
+        phoneLabel.setBounds(xPosition, yStart + 40, 80, 30);
+        phoneField.setBounds(xPosition + 85, yStart + 40, 200, 30);
+
+        emailLabel.setBounds(xPosition, yStart + 80, 80, 30);
+        emailField.setBounds(xPosition + 85, yStart + 80, 200, 30);
+
+        passwordLabel.setBounds(xPosition, yStart + 120, 80, 30);
+        passwordField.setBounds(xPosition + 85, yStart + 120, 200, 30);
+
+        // Add components to the frame
         frame.add(nameLabel);
         frame.add(nameField);
         frame.add(phoneLabel);
@@ -52,11 +89,39 @@ public class Customer extends User {
         frame.add(emailField);
         frame.add(passwordLabel);
         frame.add(passwordField);
-        frame.add(signupButton);
+
+        // Ensure components are visible and appropriately sized
+        styleTextField(nameField);
+        styleTextField(phoneField);
+        styleTextField(emailField);
+        styleTextField(passwordField);
+        
+        // Define reddish-brown color
+        Color reddishBrown = new Color(139, 69, 19);
+        
+        // Create sign-up button and apply reddish-brown color
+        JButton signupButton = new JButton("Sign Up");
+        JLabel switchToLoginButton = new JLabel("Already have an account? Login");
+
+        signupButton.setBackground(reddishBrown);
+        signupButton.setForeground(Color.WHITE); // Set text color to white for better readability
+        signupButton.setFont(new Font("Arial", Font.BOLD, 14));
+        signupButton.setBounds(940, 450, 200, 40); // Set position and size
+        
+        switchToLoginButton.setForeground(reddishBrown); // Change color to indicate it's clickable
+        switchToLoginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Change cursor to hand when hovered
+        switchToLoginButton.setBounds(945, 490, 250, 50); // Position under the "Sign Up" button
         frame.add(switchToLoginButton);
 
-        frame.setVisible(true);
+        // Ensure the button text is visible and not hidden by the focus paint
+        signupButton.setOpaque(true);
+        signupButton.setBorderPainted(false); // Optional: remove border if you want the color to fill the button completely
 
+        // Add button to the frame
+        frame.add(signupButton);
+
+        frame.setVisible(true);
+        // Example action listener for the sign-up button
         signupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,12 +130,11 @@ public class Customer extends User {
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
 
-                // Here you might call a static method in Customer or another class to validate and register the customer.
-                if (Customer.validateCustomer(name, phone, email, password)) {
+                if (validateCustomer(name, phone, email, password)) {
                     if (db.registerCustomer(name, phone, email, password)) {
                         JOptionPane.showMessageDialog(frame, "Signup successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        frame.dispose(); // Close the frame and optionally open another one, like a login window.
-                        showLoginWindow();
+                        frame.dispose();
+                        showLoginWindow();  // Transition to the login window after successful signup
                     } else {
                         JOptionPane.showMessageDialog(frame, "Signup failed. Email might already be registered.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -79,15 +143,104 @@ public class Customer extends User {
                 }
             }
         });
+        
 
-        switchToLoginButton.addActionListener(new ActionListener() {
+        switchToLoginButton.addMouseListener(new MouseAdapter(){
             @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose(); // Close the signup and open the login window.
-                showLoginWindow(); // Assuming there is also a method to show the login window.
+            public void mouseClicked(MouseEvent e) {
+                frame.dispose();
+                showLoginWindow(); // Show login window when switching from sign up
             }
         });
+        
     }
+
+    private void addComponent(JFrame frame, Component component, GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.WEST;
+        frame.add(component, gbc);
+    }
+
+    private void styleTextField(JTextField textField) {
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            textField.getBorder(), 
+            BorderFactory.createEmptyBorder(5, 15, 5, 15)));
+        textField.setFont(new Font("Arial", Font.PLAIN, 16));
+    }
+
+    private void styleButton(JButton button) {
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+        button.setBackground(new Color(255, 255, 255, 200)); // Semi-transparent white
+        button.setForeground(Color.BLACK);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+    }
+
+
+//        JFrame frame = new JFrame("Customer Signup");
+//        
+//        BackgroundPanel signUpPanel = new BackgroundPanel("SignuUp.png"); // Provide the path to your image file
+//
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(600, 500);
+//        frame.setLayout(new GridLayout(6, 2));
+//        
+//
+//        JLabel nameLabel = new JLabel("Name:");
+//        JTextField nameField = new JTextField();
+//        JLabel phoneLabel = new JLabel("Phone:");
+//        JTextField phoneField = new JTextField();
+//        JLabel emailLabel = new JLabel("Email:");
+//        JTextField emailField = new JTextField();
+//        JLabel passwordLabel = new JLabel("Password:");
+//        JPasswordField passwordField = new JPasswordField();
+//
+//        JButton signupButton = new JButton("Sign Up");
+//        JButton switchToLoginButton = new JButton("Already have an account? Login");
+//
+//        frame.add(nameLabel);
+//        frame.add(nameField);
+//        frame.add(phoneLabel);
+//        frame.add(phoneField);
+//        frame.add(emailLabel);
+//        frame.add(emailField);
+//        frame.add(passwordLabel);
+//        frame.add(passwordField);
+//        frame.add(signupButton);
+//        frame.add(switchToLoginButton);
+//
+//        frame.setVisible(true);
+//
+//        signupButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String name = nameField.getText();
+//                String phone = phoneField.getText();
+//                String email = emailField.getText();
+//                String password = new String(passwordField.getPassword());
+//
+//                // Here you might call a static method in Customer or another class to validate and register the customer.
+//                if (Customer.validateCustomer(name, phone, email, password)) {
+//                    if (db.registerCustomer(name, phone, email, password)) {
+//                        JOptionPane.showMessageDialog(frame, "Signup successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+//                        frame.dispose(); // Close the frame and optionally open another one, like a login window.
+//                        showLoginWindow();
+//                    } else {
+//                        JOptionPane.showMessageDialog(frame, "Signup failed. Email might already be registered.", "Error", JOptionPane.ERROR_MESSAGE);
+//                    }
+//                } else {
+//                    JOptionPane.showMessageDialog(frame, "Invalid data. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+//                }
+//            }
+//        });
+//
+//        switchToLoginButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                frame.dispose(); // Close the signup and open the login window.
+//                showLoginWindow(); // Assuming there is also a method to show the login window.
+//            }
+//        });
+    
 
 
     public void showLoginWindow() {

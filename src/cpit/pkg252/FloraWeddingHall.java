@@ -1,5 +1,6 @@
 package cpit.pkg252;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -309,6 +310,7 @@ public class FloraWeddingHall {
     }
 
     public static void main(String[] args) throws SQLException {
+        
         try {
             Database.setupDatabase();
         } catch (SQLException e) {
@@ -321,6 +323,8 @@ public class FloraWeddingHall {
         //showEntryMenu();
         
         new Customer().showSignupWindow() ;
+        
+        //new BookHallGUI();
     }
 
     private static void viewCustomers() {
