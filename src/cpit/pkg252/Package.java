@@ -9,7 +9,8 @@ public abstract class Package {
     protected String packageDescription;
     protected String packageName;
     protected double packagePrice;
-    protected List<String> includedServices = new ArrayList<>();
+    protected List <String> includedServices = new ArrayList<>();
+    protected List <String> servicesPrices = new ArrayList<>();
 
     public Package() {
     }
@@ -28,22 +29,39 @@ public abstract class Package {
         this.packagePrice = packagePrice;
     }
 
-    public void addService(String service, int price) {
-        includedServices.add(service);
-        packagePrice += price;
+    public void addService(String service, double price) {
+        this.includedServices.add(service);
+        this.servicesPrices.add(price + "");
+        
+        this.packagePrice += price;
     }
-
-    public List<String> getIncludedServices() {
-        return includedServices;
+    
+    public String getIncludedServices() {
+        String services = "";
+        for (int i = 0; i < includedServices.size() - 1; i++) {
+            services += includedServices.get(i) + ", ";
+        }
+        services += includedServices.get(includedServices.size() - 1);
+        return services;     
+    }
+    
+    public String getServicesPrices() {
+        String prices = "";
+        for (int i = 0; i < servicesPrices.size() - 1; i++) {
+            prices += servicesPrices.get(i) + ", ";
+        }
+        prices += servicesPrices.get(servicesPrices.size() - 1);
+        
+        return prices;     
     }
 
     public boolean deleteService(String service, int price) {
         packagePrice -= price;
-        return includedServices.remove(service);
+        return this.includedServices.remove(service);
     }
 
     public String getPackageDescription() {
-        return packageDescription;
+        return this.packageDescription;
     }
 
     public void setPackageDescription(String packageDescription) {
@@ -51,30 +69,15 @@ public abstract class Package {
     }
 
     public String getPackageId() {
-        return packageId;
+        return this.packageId;
     }
 
     public String getPackageName() {
-        return packageName;
+        return this.packageName;
     }
 
     public double getPackagePrice() {
-        return packagePrice;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append(packageName).append("; \n");
-        s.append(packageDescription).append(" \n");
-        s.append("Price: ").append(packagePrice).append(" \n");
-        s.append("Included Services: \n");
-
-        for (String service : includedServices) {
-            s.append(service).append(" \n");
-        }
-
-        return s.toString();
+        return this.packagePrice;
     }
 }
 

@@ -1,14 +1,5 @@
 package cpit.pkg252;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author wedalotibi
- */
 import cpit.pkg252.Customer;
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +39,7 @@ public class HomeGUI {
     // ActionListener for viewing packages
     private class ViewPackagesAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-          new PackageViewerGUI();
+          //new PackageViewerGUI();
         }
     }
 

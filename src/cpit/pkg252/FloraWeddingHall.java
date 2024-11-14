@@ -196,7 +196,7 @@ public class FloraWeddingHall {
                 // Execute corresponding action based on choice
                 switch (choice) {
                     case 1:
-                        new PackageViewerGUI();  // View available packages
+                        //new PackageViewerGUI();  // View available packages
                         break;
                     case 2:
                         viewCustomers();  // View customer details
@@ -322,8 +322,8 @@ public class FloraWeddingHall {
         // Display the initial entry menu
         //showEntryMenu();
         
-        new Customer().showSignupWindow() ;
-        
+        //new Customer().showSignupWindow();
+        new Customer().showLoginWindow();
         //new BookHallGUI();
     }
 

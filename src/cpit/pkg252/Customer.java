@@ -1,29 +1,15 @@
 package cpit.pkg252;
 
-import static cpit.pkg252.Database.getConnection;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Scanner;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,30 +23,27 @@ public class Customer extends User {
     private String password;
     private String alert;
 
-    Database db= new Database();
-        
-        public  void showSignupWindow() {
-       
-        
+    Database db = new Database();
+
+    public void showSignupWindow() {
+
         JFrame frame = new JFrame("Customer Signup");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1383, 768);
         frame.setLayout(null); // Disable layout manager
-        
+
         //Background Image
-        BackgroundPanel backgroundPanel = new BackgroundPanel("SignUp.png");    
-        frame.setContentPane(backgroundPanel);  
-        
-        
+        BackgroundPanel backgroundPanel = new BackgroundPanel("SignUp.jpg");
+        frame.setContentPane(backgroundPanel);
 
         // Create labels and text fields with appropriate styling and positioning
-        JLabel nameLabel = new JLabel("Name:");
+        JLabel nameLabel = new JLabel("Name");
         JTextField nameField = new JTextField();
-        JLabel phoneLabel = new JLabel("Phone:");
+        JLabel phoneLabel = new JLabel("Phone");
         JTextField phoneField = new JTextField();
-        JLabel emailLabel = new JLabel("Email:");
+        JLabel emailLabel = new JLabel("Email");
         JTextField emailField = new JTextField();
-        JLabel passwordLabel = new JLabel("Password:");
+        JLabel passwordLabel = new JLabel("Password");
         JPasswordField passwordField = new JPasswordField();
 
         // Set positions and dimensions directly
@@ -95,10 +78,10 @@ public class Customer extends User {
         styleTextField(phoneField);
         styleTextField(emailField);
         styleTextField(passwordField);
-        
+
         // Define reddish-brown color
         Color reddishBrown = new Color(139, 69, 19);
-        
+
         // Create sign-up button and apply reddish-brown color
         JButton signupButton = new JButton("Sign Up");
         JLabel switchToLoginButton = new JLabel("Already have an account? Login");
@@ -107,7 +90,7 @@ public class Customer extends User {
         signupButton.setForeground(Color.WHITE); // Set text color to white for better readability
         signupButton.setFont(new Font("Arial", Font.BOLD, 14));
         signupButton.setBounds(940, 450, 200, 40); // Set position and size
-        
+
         switchToLoginButton.setForeground(reddishBrown); // Change color to indicate it's clickable
         switchToLoginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Change cursor to hand when hovered
         switchToLoginButton.setBounds(945, 490, 250, 50); // Position under the "Sign Up" button
@@ -143,16 +126,15 @@ public class Customer extends User {
                 }
             }
         });
-        
 
-        switchToLoginButton.addMouseListener(new MouseAdapter(){
+        switchToLoginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
                 showLoginWindow(); // Show login window when switching from sign up
             }
         });
-        
+
     }
 
     private void addComponent(JFrame frame, Component component, GridBagConstraints gbc) {
@@ -162,8 +144,8 @@ public class Customer extends User {
 
     private void styleTextField(JTextField textField) {
         textField.setBorder(BorderFactory.createCompoundBorder(
-            textField.getBorder(), 
-            BorderFactory.createEmptyBorder(5, 15, 5, 15)));
+                textField.getBorder(),
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)));
         textField.setFont(new Font("Arial", Font.PLAIN, 16));
     }
 
@@ -175,98 +157,65 @@ public class Customer extends User {
         button.setFont(new Font("Arial", Font.BOLD, 14));
     }
 
-
-//        JFrame frame = new JFrame("Customer Signup");
-//        
-//        BackgroundPanel signUpPanel = new BackgroundPanel("SignuUp.png"); // Provide the path to your image file
-//
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(600, 500);
-//        frame.setLayout(new GridLayout(6, 2));
-//        
-//
-//        JLabel nameLabel = new JLabel("Name:");
-//        JTextField nameField = new JTextField();
-//        JLabel phoneLabel = new JLabel("Phone:");
-//        JTextField phoneField = new JTextField();
-//        JLabel emailLabel = new JLabel("Email:");
-//        JTextField emailField = new JTextField();
-//        JLabel passwordLabel = new JLabel("Password:");
-//        JPasswordField passwordField = new JPasswordField();
-//
-//        JButton signupButton = new JButton("Sign Up");
-//        JButton switchToLoginButton = new JButton("Already have an account? Login");
-//
-//        frame.add(nameLabel);
-//        frame.add(nameField);
-//        frame.add(phoneLabel);
-//        frame.add(phoneField);
-//        frame.add(emailLabel);
-//        frame.add(emailField);
-//        frame.add(passwordLabel);
-//        frame.add(passwordField);
-//        frame.add(signupButton);
-//        frame.add(switchToLoginButton);
-//
-//        frame.setVisible(true);
-//
-//        signupButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                String name = nameField.getText();
-//                String phone = phoneField.getText();
-//                String email = emailField.getText();
-//                String password = new String(passwordField.getPassword());
-//
-//                // Here you might call a static method in Customer or another class to validate and register the customer.
-//                if (Customer.validateCustomer(name, phone, email, password)) {
-//                    if (db.registerCustomer(name, phone, email, password)) {
-//                        JOptionPane.showMessageDialog(frame, "Signup successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-//                        frame.dispose(); // Close the frame and optionally open another one, like a login window.
-//                        showLoginWindow();
-//                    } else {
-//                        JOptionPane.showMessageDialog(frame, "Signup failed. Email might already be registered.", "Error", JOptionPane.ERROR_MESSAGE);
-//                    }
-//                } else {
-//                    JOptionPane.showMessageDialog(frame, "Invalid data. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
-//                }
-//            }
-//        });
-//
-//        switchToLoginButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                frame.dispose(); // Close the signup and open the login window.
-//                showLoginWindow(); // Assuming there is also a method to show the login window.
-//            }
-//        });
-    
-
-
     public void showLoginWindow() {
         JFrame frame = new JFrame("Customer Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
+        frame.setSize(1383, 768);
+        frame.setLayout(null); // Disable layout manager
 
-        JPanel panel = new JPanel(new GridLayout(3, 2));
+        // Background Image
+        BackgroundPanel backgroundPanel = new BackgroundPanel("Login.jpg");
+        frame.setContentPane(backgroundPanel);
+
+        // Create labels and text fields with appropriate styling and positioning
         JLabel emailLabel = new JLabel("Email:");
         JTextField emailField = new JTextField();
         JLabel passwordLabel = new JLabel("Password:");
         JPasswordField passwordField = new JPasswordField();
 
+        // Define positions
+        int xPosition = 870; // Starting x position for labels
+        int yStart = 300; // Starting y position for the first label and field
+
+        emailLabel.setBounds(xPosition, yStart, 80, 30);
+        emailField.setBounds(xPosition + 85, yStart, 200, 30);
+
+        passwordLabel.setBounds(xPosition, yStart + 40, 80, 30);
+        passwordField.setBounds(xPosition + 85, yStart + 40, 200, 30);
+
+        // Add components to the frame
+        frame.add(emailLabel);
+        frame.add(emailField);
+        frame.add(passwordLabel);
+        frame.add(passwordField);
+
+        // Define reddish-brown color
+        Color reddishBrown = new Color(139, 69, 19);
+
+        // Create login button and apply styling
         JButton loginButton = new JButton("Login");
-        JButton switchToSignupButton = new JButton("Don't have an account? Sign Up");
+        JLabel switchToSignupButton = new JLabel("Don't have an account? Sign Up");
 
-        panel.add(emailLabel);
-        panel.add(emailField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
-        panel.add(loginButton);
-        panel.add(switchToSignupButton);
+        loginButton.setBackground(reddishBrown);
+        loginButton.setForeground(Color.WHITE); // Set text color to white for better readability
+        loginButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loginButton.setBounds(940, 420, 200, 40); // Set position and size
 
-        frame.add(panel);
+        switchToSignupButton.setForeground(reddishBrown); // Change color to indicate it's clickable
+        switchToSignupButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Change cursor to hand when hovered
+        switchToSignupButton.setBounds(950, 470, 250, 50); // Position under the "Login" button
+        frame.add(switchToSignupButton);
+
+        // Ensure the button text is visible and not hidden by the focus paint
+        loginButton.setOpaque(true);
+        loginButton.setBorderPainted(false); // Optional: remove border if you want the color to fill the button completely
+
+        // Add button to the frame
+        frame.add(loginButton);
+
         frame.setVisible(true);
 
+        // Action listener for the login button
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -283,33 +232,31 @@ public class Customer extends User {
             }
         });
 
-        switchToSignupButton.addActionListener(new ActionListener() {
+        // Action listener for switching to signup
+        switchToSignupButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 frame.dispose();
-                new HomeGUI();
+                showSignupWindow(); // Show signup window when switching from login
             }
         });
-
     }
-
-    
 
     public static boolean validateCustomer(String name, String phone, String email, String password) {
         if (name == null || name.isEmpty()) {
-            System.out.println("Name cannot be empty.");
+            JOptionPane.showMessageDialog(null, "Name cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (!isValidPhone(phone)) {
-            System.out.println("Invalid phone number. It should be 10 digits long.");
+            JOptionPane.showMessageDialog(null, "Invalid phone number. It should be 10 digits long.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (!isValidEmail(email)) {
-            System.out.println("Invalid email format.");
+            JOptionPane.showMessageDialog(null, "Invalid email format.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if (!isValidPassword(password)) {
-            System.out.println("Password must be at least 8 characters long and contain at least one digit.");
+            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long and contain at least one digit.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -329,126 +276,3 @@ public class Customer extends User {
         return password.length() >= 8 && password.matches(".*\\d.*");  // At least 8 characters and one digit
     }
 }
-
-//
-//    public boolean registerCustomer() {
-//        // Check if the email is already registered
-//        if (findCustomerByEmail(email) != null) {
-//            System.out.println("Email is already registered. Please log in.");
-//            return false;
-//        } else {
-//            try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(
-//                    "INSERT INTO Customer (name, phone, email, password, alerts) VALUES (?, ?, ?, ?, ?)")) {
-//                stmt.setString(1, name);
-//                stmt.setString(2, phone);
-//                stmt.setString(3, email);
-//                stmt.setString(4, password);
-//                stmt.setString(5, alert); // Use the alert value (empty string initially)
-//                stmt.executeUpdate();
-//                return true;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//                return false;
-//            }
-//        }
-//    }
-//
-//    // Login Customer
-//    public static Customer loginCustomer(Scanner scanner) {
-//        System.out.print("Enter your email: ");
-//        String email = scanner.nextLine();
-//        System.out.print("Enter your password: ");
-//        String password = scanner.nextLine();
-//
-//        // Validate login from database
-//        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(
-//                "SELECT * FROM Customer WHERE email = ? AND password = ?")) {
-//            stmt.setString(1, email);
-//            stmt.setString(2, password);
-//            ResultSet rs = stmt.executeQuery();
-//
-//            if (rs.next()) {
-//                Customer customer = new Customer(
-//                        rs.getString("name"),
-//                        rs.getString("phone"),
-//                        rs.getString("email"),
-//                        rs.getString("password")
-//                );
-//                System.out.println("Customer login successful!");
-//                return customer;
-//            } else {
-//                System.out.println("Invalid email or password.");
-//                return null;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//
-//    // Find Customer by Email
-//    private static Customer findCustomerByEmail(String email) {
-//        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(
-//                "SELECT * FROM Customer WHERE email = ?")) {
-//            stmt.setString(1, email);
-//            ResultSet rs = stmt.executeQuery();
-//
-//            if (rs.next()) {
-//                return new Customer(
-//                        rs.getString("name"),
-//                        rs.getString("phone"),
-//                        rs.getString("email"),
-//                        rs.getString("password")
-//                );
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    // Getters and Setters
-//    @Override
-//    public String getEmail() {
-//        return email;
-//    }
-//     // Email Validation (Simple regex for email format)
-//    public static boolean isValidEmail(String email) {
-//        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-//        Pattern pattern = Pattern.compile(emailRegex);
-//        Matcher matcher = pattern.matcher(email);
-//        return matcher.matches();
-//    }
-//
-//    // Phone Validation (Only digits and length of 10)
-//    public static boolean isValidPhone(String phone) {
-//        return phone.matches("\\d{10}");
-//    }
-//
-//    // Password Validation (At least 8 characters, contains at least one digit)
-//    public static boolean isValidPassword(String password) {
-//        return password.length() >= 8 && password.matches(".*\\d.*");
-//    }
-//
-//    // Validation method
-//    public static boolean validateCustomer(String name, String phone, String email, String password) {
-//        if (name == null || name.isEmpty()) {
-//            System.out.println("Name cannot be empty.");
-//            return false;
-//        }
-//        if (!isValidPhone(phone)) {
-//            System.out.println("Invalid phone number. It should be 10 digits long.");
-//            return false;
-//        }
-//        if (!isValidEmail(email)) {
-//            System.out.println("Invalid email format.");
-//            return false;
-//        }
-//        if (!isValidPassword(password)) {
-//            System.out.println("Password must be at least 8 characters long and contain at least one digit.");
-//            return false;
-//        }
-//        return true;
-//    }
-  
-

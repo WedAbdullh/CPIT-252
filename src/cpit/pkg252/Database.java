@@ -11,7 +11,7 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "W12345678";
+    private static final String PASSWORD = "01082003";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD); // Open a new connection each time
@@ -35,8 +35,8 @@ public class Database {
             createPackageTable(statement);
 
             // Insert initial records
-            insertManagerRecord(statement);
-            insertPackageRecord(statement);
+            //insertManagerRecord(statement);
+            //insertPackageRecord(statement);
         }
     }
 
@@ -45,8 +45,7 @@ public class Database {
                 + " (name VARCHAR(100) NOT NULL, "
                 + "phone VARCHAR(20) NOT NULL, "
                 + "email VARCHAR(100) UNIQUE NOT NULL, "
-                + "password VARCHAR(100) NOT NULL, "
-                + "alerts TEXT NOT NULL)";
+                + "password VARCHAR(100) NOT NULL)";
         statement.executeUpdate(createTableQuery);
     }
 
@@ -63,9 +62,11 @@ public class Database {
     public static void createPackageTable(Statement statement) throws SQLException {
         String createTableQuery = "CREATE TABLE IF NOT EXISTS Package"
                 + " (id INT PRIMARY KEY AUTO_INCREMENT, "
-                + "name VARCHAR(100) NOT NULL, "
+                + "name VARCHAR(100) UNIQUE NOT NULL, "
                 + "description TEXT NOT NULL, "
-                + "price DOUBLE NOT NULL)";
+                + "included services TEXT NOT NULL, "
+                + "services prices TEXT NOT NULL, "
+                + "total price DOUBLE NOT NULL)";
         statement.executeUpdate(createTableQuery);
     }
 
@@ -90,11 +91,17 @@ public class Database {
 
         String insertRecordsQuery = "INSERT INTO Package (name, description, price) VALUES "
                 + "('" + weddingPackage.getPackageName() + "', '"
-                + weddingPackage.getPackageDescription() + "', " + weddingPackage.getPackagePrice() + "), "
+                + weddingPackage.getPackageDescription() + "', " + weddingPackage.getIncludedServices() + "', " 
+                + weddingPackage.getServicesPrices() + "', " + weddingPackage.getPackagePrice() + "), "
+                
                 + "('" + corporatePackage.getPackageName() + "', '"
-                + corporatePackage.getPackageDescription() + "', " + corporatePackage.getPackagePrice() + "), "
+                + corporatePackage.getPackageDescription() + "', " + corporatePackage.getIncludedServices() + "', " 
+                + corporatePackage.getServicesPrices() + "', " + corporatePackage.getPackagePrice() + "), "
+                
                 + "('" + birthdayPackage.getPackageName() + "', '"
-                + birthdayPackage.getPackageDescription() + "', " + birthdayPackage.getPackagePrice() + ")";
+                + birthdayPackage.getPackageDescription() + "', " + birthdayPackage.getIncludedServices() + "', " 
+                + birthdayPackage.getServicesPrices() + "', " + birthdayPackage.getPackagePrice() + ")";
+                    
         statement.executeUpdate(insertRecordsQuery);
     }
 

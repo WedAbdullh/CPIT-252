@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cpit.pkg252;
 
-/**
- *
- * @author gkmis
- */
 public class BookingProxy implements Booking{
      private int bookingID;
     private String bookingStatus;
