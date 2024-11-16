@@ -15,7 +15,7 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "01082003";
+    private static final String PASSWORD = "lougin12345";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD); // Open a new connection each time
@@ -39,8 +39,8 @@ public class Database {
             createPackageTable(statement);
 
             // Insert initial records
-            //insertManagerRecord(statement);
-            //insertPackageRecord();
+            insertManagerRecord(statement);
+            insertPackageRecord();
         }
     }
 

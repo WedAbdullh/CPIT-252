@@ -1,6 +1,7 @@
 package FloraWeddingHall.main;
 
 import FloraWeddingHall.GUI.*;
+import FloraWeddingHall.system.Customer;
 import FloraWeddingHall.system.Database;
 import java.sql.SQLException;
 
@@ -18,9 +19,15 @@ public class FloraWeddingHall {
         System.out.println("Welcome to Flora Wedding Hall!");
 
         //new Customer().showSignupWindow();
-        //LogInGUI.showLoginWindow();
-       //ManagerDashboardGUI.showPackagesWindow();
+        
+        LogInGUI.showLoginWindow();
+         //ManagerDashboardGUI.showPackagesWindow();
         //new BookHallGUI();
+        //HomeGUI.showHomePage();
+        
+       
+        
+                
     }
 
 }

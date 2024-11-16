@@ -82,7 +82,6 @@ public class SignUpGUI {
 
         frame.setVisible(true);
 
-        // Add action listeners
         signupButton.addActionListener(e -> {
             String name = nameField.getText();
             String phone = phoneField.getText();
@@ -92,14 +91,15 @@ public class SignUpGUI {
             if (!validateCustomer(name, phone, email, password)) {
                 return;
             }
-            
+
             FloraFacade system = new FloraFacade();
             boolean response = system.signUp(name, phone, email, password);
 
             if (response) {
                 JOptionPane.showMessageDialog(frame, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 frame.dispose();
-                // Show frame
+                // Navigate to the home page
+                HomeGUI.showHomePage();
             } else {
                 JOptionPane.showMessageDialog(frame, "Registration failed. This email is already in use. Please try another one.", "Error", JOptionPane.ERROR_MESSAGE);
             }

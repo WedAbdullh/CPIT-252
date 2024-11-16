@@ -83,31 +83,33 @@ public class LogInGUI {
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
 
-                if(email == null || password == null){
+                if (email == null || password == null) {
                     JOptionPane.showMessageDialog(frame, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
                     return; // Stop further processing
                 }
 
-                if(!isValidEmail(email)){
+                if (!isValidEmail(email)) {
                     JOptionPane.showMessageDialog(frame, "Invalid email. Please enter a valid email address.", "Error", JOptionPane.ERROR_MESSAGE);
                     return; // Stop further processing
                 }
-                
+
                 FloraFacade system = new FloraFacade();
                 boolean response = system.logIn(email, password);
 
                 if (response) {
                     if (email.contains("@FloaWeddingHall.com")) {
-                        // Show manager frame
+                        // Show manager frame (future implementation if required)
+                        JOptionPane.showMessageDialog(frame, "Manager login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        ManagerDashboardGUI.showPackagesWindow();
+                        // You could call a manager-specific GUI here, e.g., ManagerHomeGUI.showManagerHomePage();
                     } else {
                         JOptionPane.showMessageDialog(frame, "Customer login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        // Show customer frame
+                        frame.dispose(); // Close the login window
+                        HomeGUI.showHomePage(); // Show the home page for customers
                     }
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Log in failed. The email is not registered in.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    JOptionPane.showMessageDialog(frame, "Log in failed. The email is not registered.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                JOptionPane.showMessageDialog(frame, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 frame.dispose();
             }
         });
@@ -121,10 +123,11 @@ public class LogInGUI {
             }
         });
     }
-    
+
     private static boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
         return pattern.matcher(email).matches();
     }
+
 }

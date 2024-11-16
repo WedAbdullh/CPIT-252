@@ -19,39 +19,42 @@ public class FloraFacade {
     public boolean logIn(String email, String password) {
         // Check if the user is a Manager
         if (email.contains("@FloaWeddingHall.com")) {
-            if(SingletonManager.logInManager(email, password)){
+            if (SingletonManager.logInManager(email, password)) {
                 manager = SingletonManager.getInstance();
                 return true;
             } else {
                 return false;
             }
         }
-        
+
         // Check if the user is a Customer
         if (Database.loginCustomer(email, password)) {
             // Fetch customer details from the database
-            customer = Database.getCustomerByEmail(email); 
+            customer = Database.getCustomerByEmail(email);
             return true;
         }
-        
+
         return false;
     }
 
     // Customer sign-up process
     public boolean signUp(String name, String phone, String email, String password) {
-        if(Database.getCustomerByEmail(email) != null){
+        if (Database.getCustomerByEmail(email) != null) {
             return false;
         }
-        
+
         // Register customer in the database
         boolean isRegistered = Database.registerCustomer(name, phone, email, password);
         return isRegistered;
     }
-    
+
     public String[] getPackageDetails(String packageType) {
+        System.out.println("Requested package type: " + packageType); // Debugging line
+
         Package selectedPackage = PackageFactory.createPackage(packageType);
 
         if (selectedPackage == null) {
+            System.out.println("Package not found for: " + packageType); // Debugging line
             return null; // Return null if no package is found
         }
 
@@ -65,10 +68,7 @@ public class FloraFacade {
 
         return details;
     }
-    
-    public List<String> getBookings() {
-        return Database.viewBookings();
-    }
+
 }
 
 //

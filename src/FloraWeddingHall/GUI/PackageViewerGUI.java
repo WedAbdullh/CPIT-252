@@ -1,3 +1,4 @@
+
 package FloraWeddingHall.GUI;
 
 import FloraWeddingHall.system.FloraFacade;
@@ -12,7 +13,7 @@ public class PackageViewerGUI {
         this.packageType = packageType;
     }
 
-    private void showPackageWindow() {
+    void showPackageWindow() {
         // Fetch package details from the facade
         FloraFacade system = new FloraFacade();
         String[] details = system.getPackageDetails(packageType);
@@ -116,5 +117,6 @@ public class PackageViewerGUI {
         frame.setLocationRelativeTo(null); // Center on screen
         frame.setVisible(true);
     }
-
+  
+ 
 }
