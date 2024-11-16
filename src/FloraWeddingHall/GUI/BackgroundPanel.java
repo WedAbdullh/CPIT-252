@@ -1,12 +1,11 @@
 
-package cpit.pkg252;
+package FloraWeddingHall.GUI;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 // A panel that shows a background image

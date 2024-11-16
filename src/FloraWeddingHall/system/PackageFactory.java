@@ -1,4 +1,4 @@
-package cpit.pkg252;
+package FloraWeddingHall.system;
 
 class PackageFactory {
 

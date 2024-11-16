@@ -1,12 +1,8 @@
-package cpit.pkg252;
+package FloraWeddingHall.GUI;
 
-import static cpit.pkg252.Customer.validateCustomer;
+import FloraWeddingHall.system.FloraFacade;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class PackageViewerGUI {
 
@@ -17,7 +13,16 @@ public class PackageViewerGUI {
     }
 
     private void showPackageWindow() {
-        String[] details = packageDetails();
+        // Fetch package details from the facade
+        FloraFacade system = new FloraFacade();
+        String[] details = system.getPackageDetails(packageType);
+
+        // Handle the case where no package is found
+        if (details == null) {
+            JOptionPane.showMessageDialog(null, "No details found for the selected package type.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         JFrame frame = new JFrame("View Packages");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1383, 768);
@@ -110,24 +115,6 @@ public class PackageViewerGUI {
         frame.add(layeredPane);
         frame.setLocationRelativeTo(null); // Center on screen
         frame.setVisible(true);
-    }
-
-    private String[] packageDetails() {
-        // Simulating fetching a package based on type
-        Package selectedPackage = PackageFactory.createPackage(packageType);
-        String[] details = new String[5];
-        if (selectedPackage != null) {
-            details[0] = selectedPackage.getPackageName();
-            details[1] = selectedPackage.getPackageDescription();
-            details[2] = selectedPackage.getPackagePrice() + "";
-            details[3] = selectedPackage.getIncludedServices();
-            details[4] = selectedPackage.getServicesPrices();
-        } else {
-            // Handle case where no package is found (this should not happen unless there's an error in code)
-            JOptionPane.showMessageDialog(null, "No details found for the selected package type.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        return details;
     }
 
 }

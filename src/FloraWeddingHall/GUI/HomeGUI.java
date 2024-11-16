@@ -1,6 +1,5 @@
-package cpit.pkg252;
+package FloraWeddingHall.GUI;
 
-import cpit.pkg252.Customer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,7 +30,7 @@ public class HomeGUI {
         // Setting action listeners
         viewPackagesButton.addActionListener(new ViewPackagesAction());
         bookHallButton.addActionListener(new BookHallAction());
-        logoutButton.addActionListener(new LogoutAction());
+        //logoutButton.addActionListener(new LogoutAction());
 
         frame.setVisible(true);
     }
@@ -51,13 +50,13 @@ public class HomeGUI {
     }
 
     // ActionListener for logout
-    private class LogoutAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            frame.dispose(); // Close the home page
-            System.out.println("Logged out successfully.");
-            new Customer().showLoginWindow(); // Optionally, redirect to login page
-        }
-    }
+//    private class LogoutAction implements ActionListener {
+//        public void actionPerformed(ActionEvent e) {
+//            frame.dispose(); // Close the home page
+//            System.out.println("Logged out successfully.");
+//            new Customer().showLoginWindow(); // Optionally, redirect to login page
+//        }
+//    }
 
     private void viewPackages() {
         System.out.println("Package viewing functionality will be implemented here.");

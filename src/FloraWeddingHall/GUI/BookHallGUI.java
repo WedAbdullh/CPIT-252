@@ -1,5 +1,5 @@
 
-package cpit.pkg252;
+package FloraWeddingHall.GUI;
 
 import javax.swing.*;
 import java.awt.*;

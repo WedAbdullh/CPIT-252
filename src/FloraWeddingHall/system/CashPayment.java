@@ -1,5 +1,5 @@
 
-package cpit.pkg252;
+package FloraWeddingHall.system;
 
 public class CashPayment implements PaymentStrategy {
 
