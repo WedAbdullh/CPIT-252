@@ -27,8 +27,7 @@ public class RealBooking implements Booking {
         System.out.println("Customer ID: " + customerID);
         System.out.println("Package ID: " + packageID);
         System.out.println("Booking Date: " + bookingDate);
-        System.out.println("Status: " + bookingStatus);
-        System.out.println("Total Price: " + totalPrice);
+       
     }
 
     @Override
