@@ -2,8 +2,6 @@ package FloraWeddingHall.GUI;
 
 import FloraWeddingHall.system.FloraFacade;
 import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -13,66 +11,57 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LogInGUI {
 
+    private static FloraFacade system = new FloraFacade();
+    
     public static void showLoginWindow() {
         JFrame frame = new JFrame("Customer Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1383, 768);
-        frame.setLayout(null); // Disable layout manager
+        frame.setLayout(null);
 
-        // Background Image
-        BackgroundPanel backgroundPanel = new BackgroundPanel("Login.jpg");
+        // Set up the background
+        JPanel backgroundPanel = DesignSystem.createBackgroundPanel("Login.jpg");
         frame.setContentPane(backgroundPanel);
 
-        // Create labels and text fields with appropriate styling and positioning
-        JLabel emailLabel = new JLabel("Email:");
+        // Create and style labels and fields
+        JLabel emailLabel = new JLabel("Email");
+        DesignSystem.styleLabel(emailLabel);
         JTextField emailField = new JTextField();
-        JLabel passwordLabel = new JLabel("Password:");
+        DesignSystem.styleTextField(emailField);
+
+        JLabel passwordLabel = new JLabel("Password");
+        DesignSystem.styleLabel(passwordLabel);
         JPasswordField passwordField = new JPasswordField();
+        DesignSystem.styleTextField(passwordField);
 
-        // Define positions
-        int xPosition = 870; // Starting x position for labels
-        int yStart = 300; // Starting y position for the first label and field
-
+        // Position components
+        int xPosition = 870, yStart = 300;
         emailLabel.setBounds(xPosition, yStart, 80, 30);
         emailField.setBounds(xPosition + 85, yStart, 200, 30);
-
         passwordLabel.setBounds(xPosition, yStart + 40, 80, 30);
         passwordField.setBounds(xPosition + 85, yStart + 40, 200, 30);
 
-        // Add components to the frame
         frame.add(emailLabel);
         frame.add(emailField);
         frame.add(passwordLabel);
         frame.add(passwordField);
 
-        // Define reddish-brown color
-        Color reddishBrown = new Color(139, 69, 19);
-
-        // Create login button and apply styling
-        JButton loginButton = new JButton("Login");
-        JLabel switchToSignupButton = new JLabel("Don't have an account? Sign Up");
-
-        loginButton.setBackground(reddishBrown);
-        loginButton.setForeground(Color.WHITE); // Set text color to white for better readability
-        loginButton.setFont(new Font("Arial", Font.BOLD, 14));
-        loginButton.setBounds(940, 420, 200, 40); // Set position and size
-
-        switchToSignupButton.setForeground(reddishBrown); // Change color to indicate it's clickable
-        switchToSignupButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Change cursor to hand when hovered
-        switchToSignupButton.setBounds(950, 470, 250, 50); // Position under the "Login" button
-        frame.add(switchToSignupButton);
-
-        // Ensure the button text is visible and not hidden by the focus paint
-        loginButton.setOpaque(true);
-        loginButton.setBorderPainted(false); // Optional: remove border if you want the color to fill the button completely
-
-        // Add button to the frame
+        // Create and add the login button
+        JButton loginButton = DesignSystem.createStyledButton("Login", new Color(139, 69, 19), 200, 40);
+        loginButton.setBounds(940, 420, 200, 40);
         frame.add(loginButton);
+
+        // Create and add the "Switch to Sign Up" label
+        JLabel switchToSignupButton = new JLabel("Don't have an account? Sign Up");
+        DesignSystem.styleClickableLabel(switchToSignupButton, new Color(139, 69, 19));
+        switchToSignupButton.setBounds(945, 470, 250, 50);
+        frame.add(switchToSignupButton);
 
         frame.setVisible(true);
 
@@ -93,15 +82,12 @@ public class LogInGUI {
                     return; // Stop further processing
                 }
 
-                FloraFacade system = new FloraFacade();
                 boolean response = system.logIn(email, password);
 
                 if (response) {
                     if (email.contains("@FloaWeddingHall.com")) {
-                        // Show manager frame (future implementation if required)
                         JOptionPane.showMessageDialog(frame, "Manager login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         ManagerDashboardGUI.showPackagesWindow();
-                        // You could call a manager-specific GUI here, e.g., ManagerHomeGUI.showManagerHomePage();
                     } else {
                         JOptionPane.showMessageDialog(frame, "Customer login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         frame.dispose(); // Close the login window

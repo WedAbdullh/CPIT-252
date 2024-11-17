@@ -8,14 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "Ghada1";
+    private static final String PASSWORD = "01082003";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD); // Open a new connection each time
@@ -286,23 +284,90 @@ public class Database {
         }
         return null; // Return null if the customer is not found
     }
-  public static String getLoggedInUser() {
+
+    public static String getLoggedInUser() {
         String loggedInUser = null;
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/wedding_hall", "root", "password");
-            Statement stmt = conn.createStatement();
+            Statement stmt = getConnection().createStatement();
             ResultSet rs = stmt.executeQuery("SELECT customer_id FROM sessions WHERE session_active = 1");
 
             if (rs.next()) {
                 loggedInUser = rs.getString("customer_id");
             }
-
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return loggedInUser;
     }
-  
+
+    public Object[][] getAllPackages() throws SQLException {
+        String query = "SELECT id, name, description, includedServices, servicesPrices, totalPrice FROM Package";
+        ArrayList<Object[]> packageList = new ArrayList<>();
+
+        try (Statement statement = getConnection().createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+                String includedServices = resultSet.getString("includedServices");
+                String servicesPrices = resultSet.getString("servicesPrices");
+                double totalPrice = resultSet.getDouble("totalPrice");
+
+                packageList.add(new Object[]{id, name, description, includedServices, servicesPrices, totalPrice});
+            }
+        }
+
+        return convertListTo2DArray(packageList);
+
+    }
+
+    public Object[][] getAllBookings() throws SQLException {
+        String query = "SELECT b.id, c.name AS customerName, p.name AS packageName, b.bookingDate, b.paymentStatus "
+                + "FROM Bookings b "
+                + "JOIN Customer c ON b.customerId = c.id "
+                + "JOIN Package p ON b.packageId = p.id";
+
+        ArrayList<Object[]> bookingsList = new ArrayList<>();
+        try (Statement statement = getConnection().createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String customerName = resultSet.getString("customerName");
+                String packageName = resultSet.getString("packageName");
+                String bookingDate = resultSet.getString("bookingDate");
+                String paymentStatus = resultSet.getString("paymentStatus");
+
+                bookingsList.add(new Object[]{id, customerName, packageName, bookingDate, paymentStatus});
+            }
+        }
+
+        return convertListTo2DArray(bookingsList);
+    }
+
+    public Object[][] getAllCustomers() throws SQLException {
+        String query = "SELECT id, name, email, phone FROM Customer";
+        ArrayList<Object[]> customersList = new ArrayList<>();
+        try (Statement statement = getConnection().createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String phone = resultSet.getString("phone");
+
+                customersList.add(new Object[]{id, name, email, phone});
+            }
+        }
+
+        return convertListTo2DArray(customersList);
+    }
+
+    private Object[][] convertListTo2DArray(ArrayList<Object[]> list) {
+        Object[][] array = new Object[list.size()][];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
 }

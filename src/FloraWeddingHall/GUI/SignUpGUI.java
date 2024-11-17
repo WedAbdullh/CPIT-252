@@ -2,7 +2,6 @@ package FloraWeddingHall.GUI;
 
 import FloraWeddingHall.system.FloraFacade;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.regex.Pattern;
@@ -16,13 +15,15 @@ import javax.swing.JTextField;
 
 public class SignUpGUI {
 
+    private static FloraFacade system = new FloraFacade();
+    
     public static void showSignupWindow() {
         JFrame frame = new JFrame("Customer Signup");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1383, 768);
         frame.setLayout(null);
 
-        // Set up the background using DesignSystem
+        // Set up the background
         JPanel backgroundPanel = DesignSystem.createBackgroundPanel("SignUp.jpg");
         frame.setContentPane(backgroundPanel);
 
@@ -67,16 +68,14 @@ public class SignUpGUI {
         frame.add(passwordLabel);
         frame.add(passwordField);
 
-        // Create and style the sign-up button
+        // Create and add the sign-up button
         JButton signupButton = DesignSystem.createStyledButton("Sign Up", new Color(139, 69, 19), 200, 40);
         signupButton.setBounds(940, 450, 200, 40);
         frame.add(signupButton);
 
-        // Create and style the "Switch to Login" label
+        // Create and add the "Switch to Login" label
         JLabel switchToLoginButton = new JLabel("Already have an account? Login");
-        DesignSystem.styleLabel(switchToLoginButton);
-        switchToLoginButton.setForeground(new Color(139, 69, 19));
-        switchToLoginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        DesignSystem.styleClickableLabel(switchToLoginButton, new Color(139, 69, 19));
         switchToLoginButton.setBounds(945, 490, 250, 50);
         frame.add(switchToLoginButton);
 
@@ -92,7 +91,6 @@ public class SignUpGUI {
                 return;
             }
 
-            FloraFacade system = new FloraFacade();
             boolean response = system.signUp(name, phone, email, password);
 
             if (response) {
@@ -115,7 +113,11 @@ public class SignUpGUI {
     }
 
     public static boolean validateCustomer(String name, String phone, String email, String password) {
-        if (name == null || name.isEmpty()) {
+        if (name == null || phone == null || email == null || password == null) {
+            JOptionPane.showMessageDialog(null, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Name cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }

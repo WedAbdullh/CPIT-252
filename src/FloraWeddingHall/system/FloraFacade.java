@@ -1,8 +1,6 @@
 package FloraWeddingHall.system;
 
-import java.util.List;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.SQLException;
 
 public class FloraFacade {
 
@@ -13,21 +11,20 @@ public class FloraFacade {
     private SingletonManager manager;
     private BookingProxy bookingProxy;
 
-
     public FloraFacade() {
         this.database = new Database();
         this.packageFactory = new PackageFactory();
         this.bookingProxy = new BookingProxy();
     }
 
-     // Authentication Methods
-     public boolean logIn(String email, String password) {
+    // Authentication Methods
+    public boolean logIn(String email, String password) {
         if (email.contains("@FloaWeddingHall.com")) {
             return SingletonManager.logInManager(email, password);
         }
         return Database.loginCustomer(email, password);
     }
-     
+
 //    public boolean logIn(String email, String password) {
 //        // Check if the user is a Manager
 //        if (email.contains("@FloaWeddingHall.com")) {
@@ -48,10 +45,9 @@ public class FloraFacade {
 //
 //        return false;
 //    }
-
     // Customer sign-up process
     public boolean signUp(String name, String phone, String email, String password) {
-              return Database.registerCustomer(name, phone, email, password);
+        return Database.registerCustomer(name, phone, email, password);
 
 //        if (Database.getCustomerByEmail(email) != null) {
 //            return false;
@@ -61,14 +57,14 @@ public class FloraFacade {
 //        boolean isRegistered = Database.registerCustomer(name, phone, email, password);
 //        return isRegistered;
     }
-    
-     // --------- Package Management Methods -------- 
+
+    // --------- Package Management Methods -------- 
 //    this acts as an interface for the GUI to get package details without exposing the Package object directly.
     public String[] fetchPackageDetails(String packageType) {
         return getPackageDetails(packageType);
     }
-    
-      public String[] getPackageDetails(String packageType) {
+
+    public String[] getPackageDetails(String packageType) {
         System.out.println("Requested package type: " + packageType); // Debugging line
 
         Package selectedPackage = PackageFactory.createPackage(packageType);
@@ -88,100 +84,76 @@ public class FloraFacade {
 
         return details;
     }
-    
-        // --------- Booking Management Methods -------- 
- 
-  public boolean createBooking(int customerId, String username,String selectedPackage, String bookingDate, String paymentMethod){    
+
+    // --------- Booking Management Methods -------- 
+    public boolean createBooking(int customerId, String username, String selectedPackage, String bookingDate, String paymentMethod) {
 
 // Call the existing createBooking method in BookingProxy (or equivalent class)
-      bookingProxy.createBooking(customerId, username,selectedPackage, bookingDate, paymentMethod);
-      return true; }
-
-          // --------- Payment Management Methods -------- 
-
-  // Payment Processing
-    
-     public boolean processPayment(String paymentMethod, double amount) {
-    PaymentStrategy paymentStrategy;
-
-    // Determine the payment strategy
-    switch (paymentMethod.toLowerCase()) {
-        case "cash":
-            paymentStrategy = new CashPayment();
-            break;
-        case "paypal":
-            paymentStrategy = new PayPalPayment();
-            break;
-        case "applepay":
-            paymentStrategy = new ApplePayPayment();
-            break;
-        default:
-            System.out.println("Invalid payment method.");
-            return false; // Payment failed
+        bookingProxy.createBooking(customerId, username, selectedPackage, bookingDate, paymentMethod);
+        return true;
     }
 
-     // Execute the payment
-    paymentStrategy.pay(amount);
-    return true; // Payment successful
+    // --------- Payment Management Methods -------- 
+    // Payment Processing
+    public boolean processPayment(String paymentMethod, double amount) {
+        PaymentStrategy paymentStrategy;
+
+        // Determine the payment strategy
+        switch (paymentMethod.toLowerCase()) {
+            case "cash":
+                paymentStrategy = new CashPayment();
+                break;
+            case "paypal":
+                paymentStrategy = new PayPalPayment();
+                break;
+            case "applepay":
+                paymentStrategy = new ApplePayPayment();
+                break;
+            default:
+                System.out.println("Invalid payment method.");
+                return false; // Payment failed
+        }
+
+        // Execute the payment
+        paymentStrategy.pay(amount);
+        return true; // Payment successful
+    }
+
+    public boolean addPackageToDatabase(String name, String description, String services, String servicesPrices, double totalPrice) {
+        try {
+            database.insertNewPackage(name, description, services, servicesPrices, totalPrice);
+            return true;
+        } catch (SQLException ex) {
+            ex.getMessage();
+            return false;
+        }
+    }
+
+    public Object[][] getAllPackages() {
+        try {
+            return database.getAllPackages(); // Call the database method
+        } catch (SQLException ex) {
+            System.out.println("Error fetching packages: " + ex.getMessage());
+            return new Object[0][0]; // Return an empty array on error
+        }
+    }
+
+    public Object[][] getAllBookings() {
+        try {
+            return database.getAllBookings(); // Call the database method
+        } catch (SQLException ex) {
+            System.out.println("Error fetching bookings: " + ex.getMessage());
+            return new Object[0][0]; // Return an empty array on error
+        }
+    }
+
+    public Object[][] getAllCustomers() {
+        try {
+            return database.getAllCustomers(); // Call the database method
+        } catch (SQLException ex) {
+            System.out.println("Error fetching customers: " + ex.getMessage());
+            return new Object[0][0]; // Return an empty array on error
+        }
+    }
+
 }
-    
-
-   
-
- 
-
-
-
-}
-
-
-//
-//    // Method to create a new booking
-//    public boolean createBooking(String customerId, String packageType, String paymentMethod) {
-//        Package selectedPackage = packageFactory.createPackage(packageType);
-//        if (selectedPackage == null) {
-//            System.out.println("Package type not found.");
-//            return false;
-//        }
-//
-//        RealBooking booking = new RealBooking(customerId, selectedPackage);
-//        boolean isBooked = bookingProxy.addBooking(booking);
-//        if (!isBooked) {
-//            System.out.println("Booking could not be completed.");
-//            return false;
-//        }
-//        
-//        Payment payment = createPayment(paymentMethod);
-//        if (payment != null) {
-//            paymentStrategy = new PaymentStrategy(payment);
-//            paymentStrategy.pay(booking.getPackage().getPackagePrice());
-//        } else {
-//            System.out.println("Invalid payment method.");
-//            return false;
-//        }
-//
-//        System.out.println("Booking and payment successful!");
-//        return true;
-//    }
-//
-//    public List<String> getAvailablePackages() {
-//        return packageFactory.getAvailablePackageTypes();
-//    }
-//
-//    public List<RealBooking> getBookings(String customerId) {
-//        return bookingDatabase.getBookingsForUser(customerId);
-//    }
-//
-//    private Payment createPayment(String paymentType) {
-//        switch (paymentType.toLowerCase()) {
-//            case "cash":
-//                return new CashPayment();
-//            case "applepay":
-//                return new ApplePayPayment();
-//            case "paypal":
-//                return new PayPalPayment();
-//            default:
-//                return null;
-//        }
-//    }
-
