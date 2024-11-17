@@ -8,8 +8,6 @@ public class RealBooking implements Booking {
     private String customerID; // Representing customer association
     private String packageID;  // Representing package association
     private Date bookingDate;
-    private String bookingStatus;
-    private double totalPrice;
 
     private static List<Date> bookedDates = new ArrayList<>();
 
