@@ -1,7 +1,10 @@
 package FloraWeddingHall.system;
 
-class PackageFactory {
-
+public class PackageFactory {
+/* The PackageFactory is responsible for package creation
+    and details management. It contains the logic to create package 
+    objects and fetch specific details. */
+    
     public static Package createPackage(String type) {
 
         if (type.equalsIgnoreCase("Wedding")) {
@@ -15,4 +18,7 @@ class PackageFactory {
         }
 
     }
+    
+
+      
 }

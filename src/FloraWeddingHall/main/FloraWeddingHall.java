@@ -21,9 +21,9 @@ public class FloraWeddingHall {
         //new Customer().showSignupWindow();
         
         LogInGUI.showLoginWindow();
-         //ManagerDashboardGUI.showPackagesWindow();
-        //new BookHallGUI();
-        //HomeGUI.showHomePage();
+//         ManagerDashboardGUI.showPackagesWindow();
+//        BookHallGUI.showBookingPage();
+//        HomeGUI.showHomePage();
         
        
         

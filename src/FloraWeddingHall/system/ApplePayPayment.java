@@ -9,8 +9,13 @@ public class ApplePayPayment implements PaymentStrategy {
         this.appleAccount = appleAccount;
     }
 
+    ApplePayPayment() {
+    }
+
     @Override
     public void pay(double amount) {
-        System.out.println("Processing Apple Pay payment of $" + amount + " for account " + appleAccount);
+//        System.out.println("Processing Apple Pay payment of $" + amount + " for account " + appleAccount);
+          System.out.println("Paid " + amount + " using Apple Pay.");
+
     }
 }

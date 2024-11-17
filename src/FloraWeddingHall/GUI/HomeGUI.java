@@ -64,16 +64,21 @@ public class HomeGUI {
         packagesLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(frame, "Opening Packages Page...");
+  // Open the Packages Viewer for the desired package type
+        frame.dispose(); // Ensure this line is being executed
+        PackageViewerGUI packageViewer = new PackageViewerGUI("Wedding"); // Or dynamically determine the package type
+        packageViewer.showPackageWindow();
+        
             }
         });
 
         bookingLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(frame, "Opening Booking Page...");
+        frame.dispose(); // Ensure this line is being executed
+        BookHallGUI.showBookingPage(); // Open the booking page
             }
-        });
+            });
 
         // Add listeners for package buttons to show package details
         weddingPackageButton.addActionListener(createPackageButtonListener("Wedding"));

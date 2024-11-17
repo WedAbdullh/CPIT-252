@@ -1,14 +1,14 @@
 package FloraWeddingHall.system;
 
+import java.util.Date;
+
 public interface Booking {
 
     int getBookingID();
 
-    String getBookingStatus();
-
-    double getTotalPrice();
-
     void viewBooking();
 
-    void confirmBooking();
+    void  createBooking(int customerId, String username,String selectedPackage, String bookingDate, String paymentMethod);
+
 }
+

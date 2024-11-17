@@ -9,8 +9,14 @@ public class PayPalPayment implements PaymentStrategy {
         this.email = email;
     }
 
+    PayPalPayment() {
+    }
+
     @Override
     public void pay(double amount) {
-        System.out.println("Processing PayPal payment of $" + amount + " for " + email);
+//        System.out.println("Processing PayPal payment of $" + amount + " for " + email);
+           System.out.println("Paid " + amount + " using PayPal.");
+
+    
     }
 }

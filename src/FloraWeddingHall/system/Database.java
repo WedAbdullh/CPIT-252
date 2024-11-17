@@ -15,7 +15,7 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "lougin12345";
+    private static final String PASSWORD = "Ghada1";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD); // Open a new connection each time
@@ -155,24 +155,6 @@ public class Database {
         }
     }
 
-//    public static void insertBookingRecord(Booking booking) throws SQLException {
-//        String insertRecordsQuery = "INSERT INTO Bookings (customerId, packageId, bookingDate, paymentStatus) VALUES (?, ?, ?, ?, ?)";
-//        Connection conn = getConnection();
-//        PreparedStatement statement = conn.prepareStatement(insertRecordsQuery)
-//        
-//            ) {
-//            
-//            statement.setInt(1, booking.getBookingId());
-//            statement.setString(2, booking.getCustomerName());
-//            statement.setString(3, booking.getPackageName());
-//            statement.setString(4, booking.getStatus());
-//            statement.setDate(5, java.sql.Date.valueOf(booking.getBookingDate()));
-//
-//            statement.executeUpdate();
-//
-//            statement.executeUpdate(insertRecordsQuery);
-//        };
-//    }
     public static void viewCustomers() {
         String selectQuery = "SELECT name, phone, email FROM Customer"; // Query to get customer details
 
@@ -230,31 +212,6 @@ public class Database {
         return bookingsList;
     }
 
-    //    // Method to fetch a booking by ID
-//    public Booking fetchBooking(int bookingId) {
-//        String query = "SELECT * FROM Bookings WHERE bookingId = ?";
-//        
-//        try (Connection conn = connect();
-//             PreparedStatement stmt = conn.prepareStatement(query)) {
-//            
-//            stmt.setInt(1, bookingId);
-//            ResultSet rs = stmt.executeQuery();
-//            
-//            if (rs.next()) {
-//                String customerName = rs.getString("customerName");
-//                String packageName = rs.getString("packageName");
-//                String status = rs.getString("status");
-//                String bookingDate = rs.getDate("bookingDate").toString();
-//
-//                return new Booking(bookingId, customerName, packageName, status, bookingDate);
-//            }
-//            
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        
-//        return null;
-//    }
     public static boolean deleteBooking(int bookingId) throws SQLException {
         // SQL query to delete a booking by ID
         String deleteSQL = "DELETE FROM Bookings WHERE id = " + bookingId;
@@ -329,5 +286,23 @@ public class Database {
         }
         return null; // Return null if the customer is not found
     }
+  public static String getLoggedInUser() {
+        String loggedInUser = null;
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/wedding_hall", "root", "password");
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT customer_id FROM sessions WHERE session_active = 1");
 
+            if (rs.next()) {
+                loggedInUser = rs.getString("customer_id");
+            }
+
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return loggedInUser;
+    }
+  
 }

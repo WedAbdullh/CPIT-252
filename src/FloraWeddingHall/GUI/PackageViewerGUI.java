@@ -14,6 +14,7 @@ public class PackageViewerGUI {
     }
 
     void showPackageWindow() {
+//        The GUI interacts with FloraFacade to fetch details for a selected package.
         // Fetch package details from the facade
         FloraFacade system = new FloraFacade();
         String[] details = system.getPackageDetails(packageType);
@@ -23,7 +24,6 @@ public class PackageViewerGUI {
             JOptionPane.showMessageDialog(null, "No details found for the selected package type.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
         JFrame frame = new JFrame("View Packages");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1383, 768);
