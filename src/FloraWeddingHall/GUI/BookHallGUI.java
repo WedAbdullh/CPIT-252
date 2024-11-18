@@ -156,8 +156,8 @@ frame.add(hiddenBookButton);
 
         frame.setVisible(true);
     }
-
-    private static double getPriceForPackage(String packageName) {
+    //changed to public
+    public static double getPriceForPackage(String packageName) {
         PackageFactory factory = new PackageFactory();
         switch (packageName) {
             case "Wedding Package":

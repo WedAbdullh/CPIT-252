@@ -1,7 +1,19 @@
 
 package FloraWeddingHall.system;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.time.LocalDate;
 import java.util.Date;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 public class Payment {
 
@@ -86,16 +98,66 @@ public class Payment {
         System.out.println("Payment notification generated for payment of " + this.price);
     }
 
-    public void generateInvoice() {
-    System.out.println("--------------------------------------------------");
-    System.out.println("                 PAYMENT INVOICE                  ");
-    System.out.println("--------------------------------------------------");
-    System.out.printf("%-20s: %s%n", "Price", String.format("$%.2f", this.price));
-    System.out.printf("%-20s: %s%n", "Payment Date", this.paymentDate.toString());
-    System.out.printf("%-20s: %s%n", "Payment Status", this.paymentStatus);
-    System.out.println("--------------------------------------------------");
-    System.out.println("                   Thank you!                     ");
-    System.out.println("--------------------------------------------------");
+    public static void generateInvoice(double amount, String accountEmail) {
+//    System.out.println("--------------------------------------------------");
+//    System.out.println("                 PAYMENT INVOICE                  ");
+//    System.out.println("--------------------------------------------------");
+//    System.out.printf("%-20s: %s%n", "Price", String.format("$%.2f", this.price));
+//    System.out.printf("%-20s: %s%n", "Payment Date", this.paymentDate.toString());
+//    System.out.printf("%-20s: %s%n", "Payment Status", this.paymentStatus);
+//    System.out.println("--------------------------------------------------");
+//    System.out.println("                   Thank you!                     ");
+//    System.out.println("--------------------------------------------------");
+        JFrame frame = new JFrame("Payment Confirmation");
+        frame.setSize(600, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(255, 228, 225)); // Soft pink background
+
+        String packageName = Database.getPackageNamesByPrice(amount);
+        String packageDescription = Database.getPackageDescriptionByPrice(amount);
+        String date = LocalDate.now().toString();
+
+        JLabel titleLabel = new JLabel("Payment Confirmation", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+
+        JLabel packageLabel = new JLabel("Package: " + packageName, SwingConstants.LEFT);
+        JLabel priceLabel = new JLabel("Price: $" + amount, SwingConstants.LEFT);
+        JLabel accountLabel = new JLabel("PayPal Account: " + accountEmail, SwingConstants.LEFT);
+        JTextArea descriptionLabel = new JTextArea("Package Description: " + packageDescription);
+        descriptionLabel.setWrapStyleWord(true);
+        descriptionLabel.setLineWrap(true);
+        descriptionLabel.setEditable(false);
+        descriptionLabel.setOpaque(false);
+        JLabel dateLabel = new JLabel("Date: " + date, SwingConstants.LEFT);
+
+        packageLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        priceLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        accountLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        dateLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        JButton okButton = new JButton("OK");
+        okButton.setFont(new Font("Arial", Font.BOLD, 16));
+        okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        okButton.addActionListener(e -> frame.dispose());
+
+        panel.add(titleLabel);
+        panel.add(Box.createVerticalStrut(40));
+        panel.add(packageLabel);
+        panel.add(priceLabel);
+        panel.add(accountLabel);
+        //panel.add(Box.createHorizontalStrut(50));
+        panel.add(descriptionLabel);
+        panel.add(dateLabel);
+        panel.add(Box.createVerticalStrut(168));
+        panel.add(okButton);
+
+        frame.add(panel);
+        frame.setVisible(true);
     }
-    
+
 }

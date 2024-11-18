@@ -13,7 +13,16 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "01082003";
+    private static final String PASSWORD = "W12345678";
+    
+    public static void main(String[] args) {
+
+        try {
+            setupDatabase();
+        } catch (SQLException e) {
+            System.out.println("Error setting up the database.");
+        }
+    }
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD); // Open a new connection each time
@@ -33,6 +42,7 @@ public class Database {
 
             // Create Customer, Manager, and Package tables
             createCustomerTable(statement);
+            insertInitialCustomers(statement);
             createManagerTable(statement);
             createPackageTable(statement);
 
@@ -51,6 +61,18 @@ public class Database {
                 + "password VARCHAR(100) NOT NULL)";
         statement.executeUpdate(createTableQuery);
     }
+    // to sign up fast
+    public static void insertInitialCustomers(Statement statement) throws SQLException {
+    // SQL command to insert three customers
+    String insertQuery = "INSERT INTO Customer (name, phone, email, password) VALUES "
+            + "('wed', '1234567890', 'wed@gmail.com', 'password123'),"
+            + "('Rafal', '0987654321', 'Rafal@gmail.com', 'password321'),"
+            + "('Logain', '1122334455', 'Logain@gmail.com', 'password331')";
+
+    // Execute the insert statement
+    statement.executeUpdate(insertQuery);
+    System.out.println("Inserted three customers successfully.");
+}
 
     public static void createManagerTable(Statement statement) throws SQLException {
         String createTableQuery = "CREATE TABLE IF NOT EXISTS Manager"
@@ -369,5 +391,46 @@ public class Database {
         }
         return array;
     }
+    
+    public static String getPackageNamesByPrice(double price) {
+ 
+
+        String packageNames = null;
+        String sql = "SELECT name FROM Package WHERE totalPrice = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setDouble(1, price);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) { // Check if there's at least one row
+                    packageNames = rs.getString("name");
+                } else {
+                    System.out.println("No packages found for the given price.");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Exception: " + e.getMessage());
+        }
+        return packageNames;
+    }
+    
+    public static String getPackageDescriptionByPrice(double price) {
+    String sql = "SELECT description FROM Package WHERE totalPrice = ?";
+    String packageDescription = "";
+
+    try (Connection conn = getConnection();  
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setDouble(1, price);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                packageDescription = rs.getString("description");
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("SQL Exception: " + e.getMessage());
+    }
+    return packageDescription;
+}
 
 }

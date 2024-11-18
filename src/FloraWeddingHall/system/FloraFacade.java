@@ -96,18 +96,21 @@ public class FloraFacade {
     // --------- Payment Management Methods -------- 
     // Payment Processing
     public boolean processPayment(String paymentMethod, double amount) {
-        PaymentStrategy paymentStrategy;
+        PaymentStrategy paymentStrategy = null;
 
         // Determine the payment strategy
         switch (paymentMethod.toLowerCase()) {
             case "cash":
-                paymentStrategy = new CashPayment();
+                paymentStrategy = new PayPalPayment();
+                paymentStrategy.pay(amount);
                 break;
             case "paypal":
                 paymentStrategy = new PayPalPayment();
+                paymentStrategy.pay(amount);
                 break;
             case "applepay":
                 paymentStrategy = new ApplePayPayment();
+                paymentStrategy.pay(amount);
                 break;
             default:
                 System.out.println("Invalid payment method.");

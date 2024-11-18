@@ -1,6 +1,15 @@
 
 package FloraWeddingHall.system;
 
+import FloraWeddingHall.GUI.BookHallGUI;
+import FloraWeddingHall.GUI.PaymentGUI;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 public class ApplePayPayment implements PaymentStrategy {
 
     private String appleAccount;
@@ -14,8 +23,9 @@ public class ApplePayPayment implements PaymentStrategy {
 
     @Override
     public void pay(double amount) {
-//        System.out.println("Processing Apple Pay payment of $" + amount + " for account " + appleAccount);
-          System.out.println("Paid " + amount + " using Apple Pay.");
-
+        
+        PaymentGUI.initializeApplePayPaymentUI(amount);
     }
+    
+   
 }
