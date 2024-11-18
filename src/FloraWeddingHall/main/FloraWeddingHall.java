@@ -17,11 +17,11 @@ public class FloraWeddingHall {
 //        }
 
         LogInGUI.showLoginWindow();
-        //ManagerDashboardGUI.showPackagesWindow();
-        //BookHallGUI.showBookingPage();
-        //HomeGUI.showHomePage();
+//        ManagerDashboardGUI.showPackagesWindow();
+//        BookHallGUI.showBookingPage();
+//        HomeGUI.showHomePage();
 //        PaymentGUI gui = new PaymentGUI();
-//        gui.showConfirmationPage( 39500.0, "wed"); 
+//        gui.initializeCashPaymentUI( 39500.0); 
 
     }
 

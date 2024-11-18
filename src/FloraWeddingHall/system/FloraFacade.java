@@ -18,44 +18,37 @@ public class FloraFacade {
     }
 
     // Authentication Methods
-    public boolean logIn(String email, String password) {
-        if (email.contains("@FloaWeddingHall.com")) {
-            return SingletonManager.logInManager(email, password);
-        }
-        return Database.loginCustomer(email, password);
-    }
 
-//    public boolean logIn(String email, String password) {
-//        // Check if the user is a Manager
-//        if (email.contains("@FloaWeddingHall.com")) {
-//            if (SingletonManager.logInManager(email, password)) {
-//                manager = SingletonManager.getInstance();
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        }
-//
-//        // Check if the user is a Customer
-//        if (Database.loginCustomer(email, password)) {
-//            // Fetch customer details from the database
-//            customer = Database.getCustomerByEmail(email);
-//            return true;
-//        }
-//
-//        return false;
-//    }
+    public boolean logIn(String email, String password) {
+        // Check if the user is a Manager
+        if (email.contains("@FloaWeddingHall.com")) {
+            if (SingletonManager.logInManager(email, password)) {
+                manager = SingletonManager.getInstance();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // Check if the user is a Customer
+        if (Database.loginCustomer(email, password)) {
+            // Fetch customer details from the database
+            customer = Database.getCustomerByEmail(email);
+            return true;
+        }
+        return false;
+    }
+    
     // Customer sign-up process
     public boolean signUp(String name, String phone, String email, String password) {
-        return Database.registerCustomer(name, phone, email, password);
 
-//        if (Database.getCustomerByEmail(email) != null) {
-//            return false;
-//        }
-//
-//        // Register customer in the database
-//        boolean isRegistered = Database.registerCustomer(name, phone, email, password);
-//        return isRegistered;
+        if (Database.getCustomerByEmail(email) != null) {
+            return false;
+        }
+
+        // Register customer in the database
+        return  Database.registerCustomer(name, phone, email, password);
+         
     }
 
     // --------- Package Management Methods -------- 
@@ -65,7 +58,7 @@ public class FloraFacade {
     }
 
     public String[] getPackageDetails(String packageType) {
-        System.out.println("Requested package type: " + packageType); // Debugging line
+//        System.out.println("Requested package type: " + packageType); // Debugging line
 
         Package selectedPackage = PackageFactory.createPackage(packageType);
 
@@ -86,31 +79,53 @@ public class FloraFacade {
     }
 
     // --------- Booking Management Methods -------- 
-    public boolean createBooking(int customerId, String username, String selectedPackage, String bookingDate, String paymentMethod) {
+    public void createBooking(int customerId, String username, String packageid, String bookingDate, String paymentMethod) {
+       try{
+     // Call the existing createBooking method in BookingProxy
+        bookingProxy.createBooking(customerId, username, packageid, bookingDate, paymentMethod);
+        System.out.println("Booking successfully created for user: " + username);
 
-// Call the existing createBooking method in BookingProxy (or equivalent class)
-        bookingProxy.createBooking(customerId, username, selectedPackage, bookingDate, paymentMethod);
-        return true;
+       }catch (Exception e) {
+            System.err.println("Error creating booking: " + e.getMessage());
+        }
+    }
+    
+     public Object[][] getAllBookings() {
+        try {
+            return database.getAllBookings(); // Call the database method
+        } catch (SQLException ex) {
+            System.out.println("Error fetching bookings: " + ex.getMessage());
+            return new Object[0][0]; // Return an empty array on error
+        }
+    }
+     
+        public Object[][] getAllCustomers() {
+        try {
+            return database.getAllCustomers(); // Call the database method
+        } catch (SQLException ex) {
+            System.out.println("Error fetching customers: " + ex.getMessage());
+            return new Object[0][0]; // Return an empty array on error
+        }
     }
 
     // --------- Payment Management Methods -------- 
-    // Payment Processing
-    public boolean processPayment(String paymentMethod, double amount) {
+
+        public boolean processPayment(String paymentMethod, double amount) {
         PaymentStrategy paymentStrategy = null;
 
         // Determine the payment strategy
         switch (paymentMethod.toLowerCase()) {
             case "cash":
                 paymentStrategy = new PayPalPayment();
-                paymentStrategy.pay(amount);
+//                paymentStrategy.pay(amount);
                 break;
             case "paypal":
                 paymentStrategy = new PayPalPayment();
-                paymentStrategy.pay(amount);
+//                paymentStrategy.pay(amount);
                 break;
             case "applepay":
                 paymentStrategy = new ApplePayPayment();
-                paymentStrategy.pay(amount);
+//                paymentStrategy.pay(amount);
                 break;
             default:
                 System.out.println("Invalid payment method.");
@@ -121,6 +136,8 @@ public class FloraFacade {
         paymentStrategy.pay(amount);
         return true; // Payment successful
     }
+
+ // --------- Packages Management Methods -------- 
 
     public boolean addPackageToDatabase(String name, String description, String services, String servicesPrices, double totalPrice) {
         try {
@@ -141,22 +158,8 @@ public class FloraFacade {
         }
     }
 
-    public Object[][] getAllBookings() {
-        try {
-            return database.getAllBookings(); // Call the database method
-        } catch (SQLException ex) {
-            System.out.println("Error fetching bookings: " + ex.getMessage());
-            return new Object[0][0]; // Return an empty array on error
-        }
-    }
+   
 
-    public Object[][] getAllCustomers() {
-        try {
-            return database.getAllCustomers(); // Call the database method
-        } catch (SQLException ex) {
-            System.out.println("Error fetching customers: " + ex.getMessage());
-            return new Object[0][0]; // Return an empty array on error
-        }
-    }
+ 
 
 }

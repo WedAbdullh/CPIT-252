@@ -13,7 +13,7 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "W12345678";
+    private static final String PASSWORD = "Ghada1";
     
     public static void main(String[] args) {
 
@@ -100,21 +100,36 @@ public class Database {
     }
 
     public static void createBookingTable(Statement statement) {
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS Bookings"
-                + " (id INT PRIMARY KEY AUTO_INCREMENT, "
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS Bookings ("
                 + "customerId INT NOT NULL, "
+                + "username VARCHAR(255) NOT NULL, " 
                 + "packageId INT NOT NULL, "
                 + "bookingDate DATE NOT NULL, "
-                + "paymentStatus VARCHAR(20) NOT NULL, "
-                + "FOREIGN KEY (customerId) REFERENCES Customer(id), "
-                + "FOREIGN KEY (packageId) REFERENCES Package(id))";
+                + "payment_method VARCHAR(255) NOT NULL, " 
+                + "PRIMARY KEY (customer_id, booking_date))"; 
+        
         try {
             statement.executeUpdate(createTableSQL);
+            System.out.println("Bookings table created successfully.");
         } catch (SQLException ex) {
-            System.out.println("Exception in createBookingTable");
+            System.out.println("Exception in createBookingTable" + ex.getMessage());
         }
     }
 
+    public static void insertBooking(int customerId, String username, String packageId, String bookingDate, String paymentMethod) throws SQLException {
+    String query = "INSERT INTO bookings (customer_id, username, package_id, booking_date, payment_method) VALUES (?, ?, ?, ?, ?)";
+    try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setInt(1, customerId);
+        pstmt.setString(2, username);
+        pstmt.setString(3, packageId);
+        pstmt.setString(4, bookingDate);
+        pstmt.setString(5, paymentMethod);
+        pstmt.executeUpdate();
+    }catch (SQLException e) {
+        System.err.println("Error inserting booking: " + e.getMessage());
+    }
+}
+    
     public static void insertManagerRecord(Statement statement) {
         String checkManagerQuery = "SELECT COUNT(*) FROM Manager";
         ResultSet resultSet;
@@ -205,7 +220,7 @@ public class Database {
                 + "c.name AS customerName, "
                 + "p.name AS packageName, "
                 + "b.bookingDate, "
-                + "b.paymentStatus "
+                + "b.PaymentMethod "
                 + "FROM Bookings b "
                 + "JOIN Customer c ON b.customerId = c.id "
                 + "JOIN Package p ON b.packageId = p.id";
@@ -217,10 +232,10 @@ public class Database {
                 String customerName = rs.getString("customerName");
                 String packageName = rs.getString("packageName");
                 String bookingDate = rs.getDate("bookingDate").toString();
-                String paymentStatus = rs.getString("paymentStatus");
+                String PaymentMethod = rs.getString("PaymentMethod");
 
                 // Concatenate the fields with commas
-                String booking = bookingId + "," + customerName + "," + packageName + "," + bookingDate + "," + paymentStatus;
+                String booking = bookingId + "," + customerName + "," + packageName + "," + bookingDate + "," + PaymentMethod;
                 bookingsList.add(booking);
             }
 
@@ -346,7 +361,7 @@ public class Database {
     }
 
     public Object[][] getAllBookings() throws SQLException {
-        String query = "SELECT b.id, c.name AS customerName, p.name AS packageName, b.bookingDate, b.paymentStatus "
+        String query = "SELECT b.id, c.name AS customerName, p.name AS packageName, b.bookingDate, b.payment_method AS PaymentMethod"
                 + "FROM Bookings b "
                 + "JOIN Customer c ON b.customerId = c.id "
                 + "JOIN Package p ON b.packageId = p.id";
@@ -358,9 +373,9 @@ public class Database {
                 String customerName = resultSet.getString("customerName");
                 String packageName = resultSet.getString("packageName");
                 String bookingDate = resultSet.getString("bookingDate");
-                String paymentStatus = resultSet.getString("paymentStatus");
+                String PaymentMethod = resultSet.getString("PaymentMethod");
 
-                bookingsList.add(new Object[]{id, customerName, packageName, bookingDate, paymentStatus});
+                bookingsList.add(new Object[]{id, customerName, packageName, bookingDate, PaymentMethod});
             }
         }
 
@@ -393,9 +408,7 @@ public class Database {
     }
     
     public static String getPackageNamesByPrice(double price) {
- 
-
-        String packageNames = null;
+//        String packageNames = null;
         String sql = "SELECT name FROM Package WHERE totalPrice = ?";
 
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -403,7 +416,7 @@ public class Database {
             pstmt.setDouble(1, price);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) { // Check if there's at least one row
-                    packageNames = rs.getString("name");
+                    return  rs.getString("name");
                 } else {
                     System.out.println("No packages found for the given price.");
                 }
@@ -411,12 +424,12 @@ public class Database {
         } catch (SQLException e) {
             System.err.println("SQL Exception: " + e.getMessage());
         }
-        return packageNames;
+        return null;  // Return null if no package matches the price
     }
     
     public static String getPackageDescriptionByPrice(double price) {
     String sql = "SELECT description FROM Package WHERE totalPrice = ?";
-    String packageDescription = "";
+    String packageDescription = "No description available";
 
     try (Connection conn = getConnection();  
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -424,7 +437,7 @@ public class Database {
         pstmt.setDouble(1, price);
         try (ResultSet rs = pstmt.executeQuery()) {
             if (rs.next()) {
-                packageDescription = rs.getString("description");
+                return packageDescription = rs.getString("description");
             }
         }
     } catch (SQLException e) {

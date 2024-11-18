@@ -33,25 +33,18 @@ public class BookingProxy implements Booking {
         }
     }
 
- 
+
   @Override
-  public void createBooking(int customerId, String username,String selectedPackage, String bookingDate, String paymentMethod) {
-        // Access control: Only allow the logged-in user to create bookings
-        if (authorizedUser == null || !authorizedUser.equals(username)) {
-            System.out.println("Access denied: Only the logged-in user can create bookings.");
-        }else{
-            // Logic to validate and add booking
-    System.out.println("Creating booking for: " + customerId);
-    System.out.println("Package: " + selectedPackage);
-    System.out.println("Date: " + bookingDate);
-    System.out.println("Payment Method: " + paymentMethod);
-
-
-    // Simulate saving to database or further processing
-     System.out.println("Access granted for user: " + username);
-    realBooking.createBooking(customerId, username, selectedPackage, bookingDate, paymentMethod); // Delegate to RealBooking
-        
+  public void createBooking(int customerId, String username,String PackageID, String bookingDate, String paymentMethod) {
+        // Access control to ensure only the logged-in users can create bookings. 
+         if (!username.equals(this.authorizedUser)) {
+            System.out.println("Access denied: You can only create bookings for yourself.");
+            return;
         }
+       //Delegates the actual database operation to RealBooking.
+        if (realBooking == null) {
+            realBooking = new RealBooking();
         }
-       
+        realBooking.createBooking(customerId, username, PackageID, bookingDate, paymentMethod);
+        } 
 }

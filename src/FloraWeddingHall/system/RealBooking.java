@@ -1,5 +1,6 @@
 package FloraWeddingHall.system;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class RealBooking implements Booking {
@@ -8,8 +9,6 @@ public class RealBooking implements Booking {
     private String customerID; // Representing customer association
     private String packageID;  // Representing package association
     private Date bookingDate;
-
-    private static List<Date> bookedDates = new ArrayList<>();
 
 
     RealBooking() {
@@ -31,14 +30,15 @@ public class RealBooking implements Booking {
     }
 
     @Override
-   public void createBooking(int customerId, String username,String selectedPackage, String bookingDate, String paymentMethod) {
-        System.out.println("Booking created successfully for:");
-        System.out.println("User: " + username);
-        System.out.println("Package: " + selectedPackage + ", Date: " + bookingDate + ", payment method: " + paymentMethod);
-  
-   }
-
-    public static boolean isDateAvailable(Date date) {
-        return !bookedDates.contains(date);
+    public void createBooking(int customerId, String username, String packageId, String bookingDate, String paymentMethod) {
+        try {
+       //Calls the Database class by insert method to insert booking details into the database.
+            Database.insertBooking(customerId, username, packageId, bookingDate, paymentMethod);
+            System.out.println("Booking successfully created for: " + username);
+        } catch (SQLException e) {
+            System.err.println("Error creating booking: " + e.getMessage());
+        }
     }
+
+   
 }

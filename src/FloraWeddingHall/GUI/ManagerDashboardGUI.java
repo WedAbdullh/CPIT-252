@@ -79,9 +79,12 @@ public class ManagerDashboardGUI {
         mainPanel.setOpaque(false);
 
         // Table for bookings
-        String[] columnNames = {"Booking ID", "Customer ID", "Package ID", "Date", "Payment Status"};
+         String[] columnNames = {"Customer ID", "Customer Name", "Package Name", "Date", "Payment Method"};
+
+//        String[] columnNames = {"Booking ID", "Customer ID", "Package ID", "Date", "Payment Status"};
         JTable table = createTable(columnNames);
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        // Fetch bookings data dynamically
         Object[][] bookingsData = system.getAllBookings(); // Retrieve bookings data
         populateTable(tableModel, bookingsData);
 

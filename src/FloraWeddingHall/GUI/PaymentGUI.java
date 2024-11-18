@@ -27,7 +27,7 @@ public class PaymentGUI {
         // Placeholder to start the GUI; actual method calls will be added later
        
     }
-   
+//   Ensure PaymentGUI methods (initializeCashPaymentUI, initializePayPalPaymentUI, etc.) depend on the database for package and price retrieval.
 
     public static void initializeCashPaymentUI(Double amount) {
         JFrame frame = new JFrame("Cash Payment");
@@ -42,14 +42,16 @@ public class PaymentGUI {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(new Color(255, 228, 225));  // Soft pink background color
 
+//         Fetch package name from the database
         String packageName = Database.getPackageNamesByPrice(amount);
+     
         JLabel packageLabel = new JLabel("Package: " + packageName, SwingConstants.CENTER);
         packageLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         JLabel priceLabel = new JLabel("Price: $" + amount, SwingConstants.CENTER);
         priceLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
+  
         // Label for the package and price
-       packageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align
+        packageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align
         priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align
         packageLabel.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));  // Add some space around the label
 
@@ -61,8 +63,7 @@ public class PaymentGUI {
         payButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         payButton.addActionListener(e -> {
-            if (packageName != null && !packageName.isEmpty()) {
-                
+            if (packageName != null) { //  && !packageName.isEmpty()
                 JOptionPane.showMessageDialog(null, "Payment confirmed for " + packageName, "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
                 frame.dispose(); // Close the frame on successful action
                 
@@ -206,6 +207,22 @@ public class PaymentGUI {
     frame.add(mainPanel, BorderLayout.CENTER);
     frame.setVisible(true);
     }
+
+    public static void showPaymentUI(String paymentMethod, double amount) {
+    switch (paymentMethod.toLowerCase()) {
+        case "cash":
+            initializeCashPaymentUI(amount);
+            break;
+        case "paypal":
+            initializePayPalPaymentUI(amount);
+            break;
+        case "applepay":
+            initializeApplePayPaymentUI(amount);
+            break;
+        default:
+            JOptionPane.showMessageDialog(null, "Invalid payment method selected!", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     
 //
