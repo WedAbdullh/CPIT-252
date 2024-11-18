@@ -1,0 +1,64 @@
+@startuml
+abstract class FloraWeddingHall.system.Package
+annotation java.lang.Override
+class FloraWeddingHall.system.ApplePayPayment
+class FloraWeddingHall.system.BirthdayPartyPackage
+class FloraWeddingHall.system.BookingProxy
+class FloraWeddingHall.system.CashPayment
+class FloraWeddingHall.system.CorporateEventPackage
+class FloraWeddingHall.system.Customer
+class FloraWeddingHall.system.Database
+class FloraWeddingHall.system.FloraFacade
+class FloraWeddingHall.system.PackageFactory
+class FloraWeddingHall.system.PayPalPayment
+class FloraWeddingHall.system.Payment
+class FloraWeddingHall.system.RealBooking
+class FloraWeddingHall.system.Response
+class FloraWeddingHall.system.SingletonManager
+class FloraWeddingHall.system.WeddingPackage
+class java.sql.Connection
+class java.sql.DriverManager
+class java.sql.PreparedStatement
+class java.sql.ResultSet
+class java.sql.SQLException
+class java.sql.Statement
+class java.util.ArrayList
+class java.util.Date
+class java.util.List
+interface FloraWeddingHall.system.Booking
+interface FloraWeddingHall.system.PaymentStrategy
+FloraWeddingHall.system.Package ..> java.util.ArrayList
+FloraWeddingHall.system.Package ..> java.util.List
+FloraWeddingHall.system.ApplePayPayment ..> java.lang.Override
+FloraWeddingHall.system.ApplePayPayment --|> FloraWeddingHall.system.PaymentStrategy
+FloraWeddingHall.system.BirthdayPartyPackage --|> FloraWeddingHall.system.Package
+FloraWeddingHall.system.BirthdayPartyPackage ..> java.lang.Override
+FloraWeddingHall.system.BookingProxy ..> java.lang.Override
+FloraWeddingHall.system.BookingProxy ..> java.util.Date
+FloraWeddingHall.system.BookingProxy --|> FloraWeddingHall.system.Booking
+FloraWeddingHall.system.CashPayment ..> java.lang.Override
+FloraWeddingHall.system.CashPayment --|> FloraWeddingHall.system.PaymentStrategy
+FloraWeddingHall.system.CorporateEventPackage --|> FloraWeddingHall.system.Package
+FloraWeddingHall.system.CorporateEventPackage ..> java.lang.Override
+FloraWeddingHall.system.Database ..> java.sql.Connection
+FloraWeddingHall.system.Database ..> java.sql.DriverManager
+FloraWeddingHall.system.Database ..> java.sql.PreparedStatement
+FloraWeddingHall.system.Database ..> java.sql.ResultSet
+FloraWeddingHall.system.Database ..> java.sql.SQLException
+FloraWeddingHall.system.Database ..> java.sql.Statement
+FloraWeddingHall.system.Database ..> java.util.ArrayList
+FloraWeddingHall.system.Database ..> java.util.List
+FloraWeddingHall.system.FloraFacade ..> java.sql.SQLException
+FloraWeddingHall.system.PayPalPayment ..> java.lang.Override
+FloraWeddingHall.system.PayPalPayment --|> FloraWeddingHall.system.PaymentStrategy
+FloraWeddingHall.system.Payment ..> java.util.Date
+FloraWeddingHall.system.RealBooking ..> java.lang.Override
+FloraWeddingHall.system.RealBooking --|> FloraWeddingHall.system.Booking
+FloraWeddingHall.system.SingletonManager ..> java.sql.Connection
+FloraWeddingHall.system.SingletonManager ..> java.sql.PreparedStatement
+FloraWeddingHall.system.SingletonManager ..> java.sql.ResultSet
+FloraWeddingHall.system.SingletonManager ..> java.sql.SQLException
+FloraWeddingHall.system.WeddingPackage --|> FloraWeddingHall.system.Package
+FloraWeddingHall.system.WeddingPackage ..> java.lang.Override
+FloraWeddingHall.system.Booking ..> java.util.Date
+@enduml

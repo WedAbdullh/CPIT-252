@@ -16,10 +16,10 @@ public class FloraWeddingHall {
 //            System.out.println("Error setting up the database.");
 //        }
 
-        LogInGUI.showLoginWindow();
+          LogInGUI.showLoginWindow();
 //        ManagerDashboardGUI.showPackagesWindow();
 //        BookHallGUI.showBookingPage();
-//        HomeGUI.showHomePage();
+        //HomeGUI.showHomePage();
 //        PaymentGUI gui = new PaymentGUI();
 //        gui.initializeCashPaymentUI( 39500.0); 
 

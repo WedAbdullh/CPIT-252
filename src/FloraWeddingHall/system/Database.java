@@ -13,7 +13,7 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "Ghada1";
+    private static final String PASSWORD = "01082003";
     
     public static void main(String[] args) {
 
@@ -45,6 +45,7 @@ public class Database {
             insertInitialCustomers(statement);
             createManagerTable(statement);
             createPackageTable(statement);
+            createBookingTable(statement);
 
             // Insert initial records
             insertManagerRecord(statement);
@@ -106,7 +107,7 @@ public class Database {
                 + "packageId INT NOT NULL, "
                 + "bookingDate DATE NOT NULL, "
                 + "payment_method VARCHAR(255) NOT NULL, " 
-                + "PRIMARY KEY (customer_id, booking_date))"; 
+                + "PRIMARY KEY (customerId, bookingDate))"; 
         
         try {
             statement.executeUpdate(createTableSQL);
@@ -117,7 +118,7 @@ public class Database {
     }
 
     public static void insertBooking(int customerId, String username, String packageId, String bookingDate, String paymentMethod) throws SQLException {
-    String query = "INSERT INTO bookings (customer_id, username, package_id, booking_date, payment_method) VALUES (?, ?, ?, ?, ?)";
+    String query = "INSERT INTO bookings (customerId, username, packageId, bookingDate, payment_method) VALUES (?, ?, ?, ?, ?)";
     try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
         pstmt.setInt(1, customerId);
         pstmt.setString(2, username);
