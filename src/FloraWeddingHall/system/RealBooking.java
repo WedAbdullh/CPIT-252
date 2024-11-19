@@ -6,8 +6,8 @@ import java.util.*;
 public class RealBooking implements Booking {
 
     private int bookingID;
-    private String customerID; // Representing customer association
-    private String packageID;  // Representing package association
+    private Customer customerID; // Representing customer association
+    private Package packageID;  // Representing package association
     private Date bookingDate;
 
 
@@ -17,16 +17,6 @@ public class RealBooking implements Booking {
     @Override
     public int getBookingID() {
         return bookingID;
-    }
-
-
-    @Override
-    public void viewBooking() {
-        System.out.println("Booking ID: " + bookingID);
-        System.out.println("Customer ID: " + customerID);
-        System.out.println("Package ID: " + packageID);
-        System.out.println("Booking Date: " + bookingDate);
-       
     }
 
     @Override

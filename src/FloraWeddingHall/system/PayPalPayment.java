@@ -16,7 +16,6 @@ public class PayPalPayment implements PaymentStrategy {
 
     @Override
     public void pay(double amount) {
-//        System.out.println("Processing PayPal payment of $" + amount + " for " + email);
            PaymentGUI.initializePayPalPaymentUI(amount);
            System.out.println("Paid " + amount + " using PayPal.");
 

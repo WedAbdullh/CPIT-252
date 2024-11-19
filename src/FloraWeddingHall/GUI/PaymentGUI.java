@@ -17,16 +17,14 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.regex.Pattern;
 import javax.swing.border.EmptyBorder;
 
 
 public class PaymentGUI {
     private JFrame frame;
 
-    public PaymentGUI() {
-        // Placeholder to start the GUI; actual method calls will be added later
-       
-    }
+    
 //   Ensure PaymentGUI methods (initializeCashPaymentUI, initializePayPalPaymentUI, etc.) depend on the database for package and price retrieval.
 
     public static void initializeCashPaymentUI(Double amount) {
@@ -122,11 +120,12 @@ public class PaymentGUI {
     payButton.setForeground(Color.BLACK);
     payButton.setBackground(Color.decode("#6A4E42"));
     payButton.addActionListener(e -> {
-            if (packageName != null && !packageName.isEmpty()) {
-                Payment.generateInvoice( amount,  emailField.getText());
-                //JOptionPane.showMessageDialog(null, "Payment confirmed for " + packageName, "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
+            String email = emailField.getText();
+            if (!isValidEmail(email)) {
+                JOptionPane.showMessageDialog(frame, "Please enter a valid PayPal email address.", "Invalid Email", JOptionPane.ERROR_MESSAGE);
+            } else if (packageName != null && !packageName.isEmpty()) {
+                Payment.generateInvoice(amount, email);
                 frame.dispose(); // Close the frame on successful action
-                
             } else {
                 JOptionPane.showMessageDialog(frame, "No package found to process payment.", "Payment Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -184,11 +183,12 @@ public class PaymentGUI {
     payButton.setForeground(Color.BLACK);
     payButton.setBackground(Color.decode("#6A4E42"));  // A dark shade for better visibility
     payButton.addActionListener(e -> {
-            if (packageName != null && !packageName.isEmpty()) {
-                Payment.generateInvoice( amount,  accountField.getText());
-                //JOptionPane.showMessageDialog(null, "Payment confirmed for " + packageName, "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
+            String email = accountLabel.getText();
+            if (!isValidEmail(email)) {
+                JOptionPane.showMessageDialog(frame, "Please enter a valid PayPal email address.", "Invalid Email", JOptionPane.ERROR_MESSAGE);
+            } else if (packageName != null && !packageName.isEmpty()) {
+                Payment.generateInvoice(amount, email);
                 frame.dispose(); // Close the frame on successful action
-                
             } else {
                 JOptionPane.showMessageDialog(frame, "No package found to process payment.", "Payment Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -207,6 +207,13 @@ public class PaymentGUI {
     frame.add(mainPanel, BorderLayout.CENTER);
     frame.setVisible(true);
     }
+    
+    private static boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pat = Pattern.compile(emailRegex);
+        return email != null && pat.matcher(email).matches();
+    }
+
 
     public static void showPaymentUI(String paymentMethod, double amount) {
     switch (paymentMethod.toLowerCase()) {
@@ -225,60 +232,5 @@ public class PaymentGUI {
 }
 
     
-//
-//    public void showConfirmationPage( double amount, String accountEmail) {
-//     JFrame frame = new JFrame("Payment Confirmation");
-//    frame.setSize(600, 400);
-//    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//    frame.setLocationRelativeTo(null);
-//
-//    JPanel panel = new JPanel();
-//    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-//    panel.setBackground(new Color(255, 228, 225)); // Soft pink background
-//
-//    String packageName = Database.getPackageNamesByPrice(amount);
-//    String packageDescription = Database.getPackageDescriptionByPrice(amount);
-//    String date = LocalDate.now().toString();
-//
-//    JLabel titleLabel = new JLabel("Payment Confirmation", SwingConstants.CENTER);
-//    titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-//
-//    JLabel packageLabel = new JLabel("Package: " + packageName, SwingConstants.LEFT);
-//    JLabel priceLabel = new JLabel("Price: $" + amount, SwingConstants.LEFT);
-//    JLabel accountLabel = new JLabel("PayPal Account: " + accountEmail, SwingConstants.LEFT);
-//    JTextArea descriptionLabel = new JTextArea("Package Description: " + packageDescription);
-//    descriptionLabel.setWrapStyleWord(true);
-//    descriptionLabel.setLineWrap(true);
-//    descriptionLabel.setEditable(false);
-//    descriptionLabel.setOpaque(false);
-//    JLabel dateLabel = new JLabel("Date: " + date, SwingConstants.LEFT);
-//
-//    packageLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-//    priceLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-//    accountLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-//    descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-//    dateLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-//
-//    JButton okButton = new JButton("OK");
-//    okButton.setFont(new Font("Arial", Font.BOLD, 16));
-//    okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-//    okButton.addActionListener(e -> frame.dispose());
-//
-//    panel.add(titleLabel);
-//    panel.add(Box.createVerticalStrut(40));
-//    panel.add(packageLabel);
-//    panel.add(priceLabel);
-//    panel.add(accountLabel);
-//    //panel.add(Box.createHorizontalStrut(50));
-//    panel.add(descriptionLabel);
-//    panel.add(dateLabel);
-//    panel.add(Box.createVerticalStrut(168));
-//    panel.add(okButton);
-//
-//    frame.add(panel);
-//    frame.setVisible(true);
-//    }
-//    
-//    
     
 }

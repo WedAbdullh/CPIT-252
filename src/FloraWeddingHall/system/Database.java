@@ -13,8 +13,8 @@ public class Database {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FloraWeddingHallDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "01082003";
-    
+    private static final String PASSWORD = "W12345678";
+
     public static void main(String[] args) {
 
         try {
@@ -62,18 +62,19 @@ public class Database {
                 + "password VARCHAR(100) NOT NULL)";
         statement.executeUpdate(createTableQuery);
     }
+
     // to sign up fast
     public static void insertInitialCustomers(Statement statement) throws SQLException {
-    // SQL command to insert three customers
-    String insertQuery = "INSERT INTO Customer (name, phone, email, password) VALUES "
-            + "('wed', '1234567890', 'wed@gmail.com', 'password123'),"
-            + "('Rafal', '0987654321', 'Rafal@gmail.com', 'password321'),"
-            + "('Logain', '1122334455', 'Logain@gmail.com', 'password331')";
+        // SQL command to insert three customers
+        String insertQuery = "INSERT INTO Customer (name, phone, email, password) VALUES "
+                + "('wed', '1234567890', 'wed@gmail.com', 'password123'),"
+                + "('Rafal', '0987654321', 'Rafal@gmail.com', 'password321'),"
+                + "('Logain', '1122334455', 'Logain@gmail.com', 'password331')";
 
-    // Execute the insert statement
-    statement.executeUpdate(insertQuery);
-    System.out.println("Inserted three customers successfully.");
-}
+        // Execute the insert statement
+        statement.executeUpdate(insertQuery);
+        System.out.println("Inserted three customers successfully.");
+    }
 
     public static void createManagerTable(Statement statement) throws SQLException {
         String createTableQuery = "CREATE TABLE IF NOT EXISTS Manager"
@@ -103,12 +104,12 @@ public class Database {
     public static void createBookingTable(Statement statement) {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS Bookings ("
                 + "customerId INT NOT NULL, "
-                + "username VARCHAR(255) NOT NULL, " 
+                + "username VARCHAR(255) NOT NULL, "
                 + "packageId INT NOT NULL, "
                 + "bookingDate DATE NOT NULL, "
-                + "payment_method VARCHAR(255) NOT NULL, " 
-                + "PRIMARY KEY (customerId, bookingDate))"; 
-        
+                + "payment_method VARCHAR(255) NOT NULL, "
+                + "PRIMARY KEY (customerId, bookingDate))";
+
         try {
             statement.executeUpdate(createTableSQL);
             System.out.println("Bookings table created successfully.");
@@ -118,19 +119,19 @@ public class Database {
     }
 
     public static void insertBooking(int customerId, String username, String packageId, String bookingDate, String paymentMethod) throws SQLException {
-    String query = "INSERT INTO bookings (customerId, username, packageId, bookingDate, payment_method) VALUES (?, ?, ?, ?, ?)";
-    try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-        pstmt.setInt(1, customerId);
-        pstmt.setString(2, username);
-        pstmt.setString(3, packageId);
-        pstmt.setString(4, bookingDate);
-        pstmt.setString(5, paymentMethod);
-        pstmt.executeUpdate();
-    }catch (SQLException e) {
-        System.err.println("Error inserting booking: " + e.getMessage());
+        String query = "INSERT INTO bookings (customerId, username, packageId, bookingDate, payment_method) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, customerId);
+            pstmt.setString(2, username);
+            pstmt.setString(3, packageId);
+            pstmt.setString(4, bookingDate);
+            pstmt.setString(5, paymentMethod);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting booking: " + e.getMessage());
+        }
     }
-}
-    
+
     public static void insertManagerRecord(Statement statement) {
         String checkManagerQuery = "SELECT COUNT(*) FROM Manager";
         ResultSet resultSet;
@@ -407,9 +408,8 @@ public class Database {
         }
         return array;
     }
-    
+
     public static String getPackageNamesByPrice(double price) {
-//        String packageNames = null;
         String sql = "SELECT name FROM Package WHERE totalPrice = ?";
 
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -417,7 +417,7 @@ public class Database {
             pstmt.setDouble(1, price);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) { // Check if there's at least one row
-                    return  rs.getString("name");
+                    return rs.getString("name");
                 } else {
                     System.out.println("No packages found for the given price.");
                 }
@@ -427,24 +427,23 @@ public class Database {
         }
         return null;  // Return null if no package matches the price
     }
-    
-    public static String getPackageDescriptionByPrice(double price) {
-    String sql = "SELECT description FROM Package WHERE totalPrice = ?";
-    String packageDescription = "No description available";
 
-    try (Connection conn = getConnection();  
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        
-        pstmt.setDouble(1, price);
-        try (ResultSet rs = pstmt.executeQuery()) {
-            if (rs.next()) {
-                return packageDescription = rs.getString("description");
+    public static String getPackageDescriptionByPrice(double price) {
+        String sql = "SELECT description FROM Package WHERE totalPrice = ?";
+        String packageDescription = "No description available";
+
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setDouble(1, price);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return packageDescription = rs.getString("description");
+                }
             }
+        } catch (SQLException e) {
+            System.err.println("SQL Exception: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.err.println("SQL Exception: " + e.getMessage());
+        return packageDescription;
     }
-    return packageDescription;
-}
 
 }

@@ -1,0 +1,103 @@
+@startuml
+abstract class FloraWeddingHall.system.Package
+class FloraWeddingHall.GUI.BookHallGUI
+class FloraWeddingHall.GUI.PaymentGUI
+class FloraWeddingHall.system.ApplePayPayment
+class FloraWeddingHall.system.BirthdayPartyPackage
+class FloraWeddingHall.system.BookingProxy
+class FloraWeddingHall.system.CashPayment
+class FloraWeddingHall.system.CorporateEventPackage
+class FloraWeddingHall.system.Customer
+class FloraWeddingHall.system.Database
+class FloraWeddingHall.system.FloraFacade
+class FloraWeddingHall.system.PackageFactory
+class FloraWeddingHall.system.PayPalPayment
+class FloraWeddingHall.system.Payment
+class FloraWeddingHall.system.RealBooking
+class FloraWeddingHall.system.Response
+class FloraWeddingHall.system.SingletonManager
+class FloraWeddingHall.system.WeddingPackage
+interface FloraWeddingHall.system.Booking
+interface FloraWeddingHall.system.PaymentStrategy
+
+FloraWeddingHall.system.ApplePayPayment --|> FloraWeddingHall.system.PaymentStrategy
+FloraWeddingHall.system.BirthdayPartyPackage --|> FloraWeddingHall.system.Package
+FloraWeddingHall.system.BookingProxy --|> FloraWeddingHall.system.Booking
+FloraWeddingHall.system.CashPayment --|> FloraWeddingHall.system.PaymentStrategy
+FloraWeddingHall.system.CorporateEventPackage --|> FloraWeddingHall.system.Package
+FloraWeddingHall.system.PayPalPayment --|> FloraWeddingHall.system.PaymentStrategy
+FloraWeddingHall.system.RealBooking --|> FloraWeddingHall.system.Booking
+FloraWeddingHall.system.WeddingPackage --|> FloraWeddingHall.system.Package
+' Abstract classes can be represented with the "abstract" keyword
+abstract class FloraWeddingHall.system.Package {
+    -packageName : String
+    -price : double
+    +getPrice() : double
+    +setPrice(price : double) : void
+}
+
+' Regular classes with fields and methods
+class FloraWeddingHall.system.ApplePayPayment {
+    -amount : double
+    -currency : String
+    +processPayment() : boolean
+    +validateCard(cardNumber : String) : boolean
+}
+
+class FloraWeddingHall.system.BirthdayPartyPackage {
+    -packageId : int
+    -features : String
+    +schedule(date : String) : boolean
+}
+
+class FloraWeddingHall.system.BookingProxy {
+    -bookingId : int
+    -bookingDetails : String
+    +createBooking(details : String) : void
+    +cancelBooking(bookingId : int) : boolean
+}
+
+class FloraWeddingHall.system.CashPayment {
+    -amount : double
+    +processPayment() : boolean
+}
+
+class FloraWeddingHall.system.CorporateEventPackage {
+    -eventId : int
+    -eventDetails : String
+    +organizeEvent() : void
+}
+
+class FloraWeddingHall.system.Customer {
+    -customerId : int
+    -name : String
+    -email : String
+    +register(name : String, email : String) : void
+    +sendEmail(email : String, message : String) : void
+}
+
+class FloraWeddingHall.system.Database {
+    +connect() : boolean
+    +disconnect() : void
+}
+
+' Interfaces with methods
+interface FloraWeddingHall.system.PaymentStrategy {
+    +pay(amount : double) : boolean
+}
+
+interface FloraWeddingHall.system.Booking {
+    +book() : void
+    +cancel() : void
+}
+
+' Relationships among classes and interfaces
+FloraWeddingHall.system.ApplePayPayment --|> FloraWeddingHall.system.PaymentStrategy : implements
+FloraWeddingHall.system.CashPayment --|> FloraWeddingHall.system.PaymentStrategy : implements
+FloraWeddingHall.system.BookingProxy --|> FloraWeddingHall.system.Booking : implements
+
+FloraWeddingHall.system.ApplePayPayment ..> FloraWeddingHall.system.Customer : uses
+FloraWeddingHall.system.CorporateEventPackage ..> FloraWeddingHall.system.Database : uses
+FloraWeddingHall.system.BirthdayPartyPackage --|> FloraWeddingHall.system.Package : extends
+
+@enduml

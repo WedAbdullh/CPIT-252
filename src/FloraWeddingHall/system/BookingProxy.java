@@ -24,21 +24,13 @@ public class BookingProxy implements Booking {
     }
 
 
-    @Override
-    public void viewBooking() {
-        if (realBooking != null) {
-            realBooking.viewBooking();
-        } else {
-            System.out.println("No booking to view.");
-        }
-    }
-
 
   @Override
   public void createBooking(int customerId, String username,String PackageID, String bookingDate, String paymentMethod) {
         // Access control to ensure only the logged-in users can create bookings. 
          if (!username.equals(this.authorizedUser)) {
             System.out.println("Access denied: You can only create bookings for yourself.");
+            System.out.println(this.authorizedUser);
             return;
         }
        //Delegates the actual database operation to RealBooking.

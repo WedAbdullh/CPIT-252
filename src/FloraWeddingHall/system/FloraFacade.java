@@ -116,16 +116,13 @@ public class FloraFacade {
         // Determine the payment strategy
         switch (paymentMethod.toLowerCase()) {
             case "cash":
-                paymentStrategy = new PayPalPayment();
-//                paymentStrategy.pay(amount);
+                paymentStrategy = new CashPayment();
                 break;
             case "paypal":
                 paymentStrategy = new PayPalPayment();
-//                paymentStrategy.pay(amount);
                 break;
             case "applepay":
                 paymentStrategy = new ApplePayPayment();
-//                paymentStrategy.pay(amount);
                 break;
             default:
                 System.out.println("Invalid payment method.");
