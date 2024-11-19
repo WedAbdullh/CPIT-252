@@ -18,7 +18,6 @@ public class FloraFacade {
     }
 
     // Authentication Methods
-
     public boolean logIn(String email, String password) {
         // Check if the user is a Manager
         if (email.contains("@FloaWeddingHall.com")) {
@@ -38,7 +37,7 @@ public class FloraFacade {
         }
         return false;
     }
-    
+
     // Customer sign-up process
     public boolean signUp(String name, String phone, String email, String password) {
 
@@ -47,8 +46,8 @@ public class FloraFacade {
         }
 
         // Register customer in the database
-        return  Database.registerCustomer(name, phone, email, password);
-         
+        return Database.registerCustomer(name, phone, email, password);
+
     }
 
     // --------- Package Management Methods -------- 
@@ -80,17 +79,17 @@ public class FloraFacade {
 
     // --------- Booking Management Methods -------- 
     public void createBooking(int customerId, String username, String packageid, String bookingDate, String paymentMethod) {
-       try{
-     // Call the existing createBooking method in BookingProxy
-        bookingProxy.createBooking(customerId, username, packageid, bookingDate, paymentMethod);
-        System.out.println("Booking successfully created for user: " + username);
+        try {
+            // Call the existing createBooking method in BookingProxy
+            bookingProxy.createBooking(customerId, username, packageid, bookingDate, paymentMethod);
+            System.out.println("Booking successfully created for user: " + username);
 
-       }catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Error creating booking: " + e.getMessage());
         }
     }
-    
-     public Object[][] getAllBookings() {
+
+    public Object[][] getAllBookings() {
         try {
             return database.getAllBookings(); // Call the database method
         } catch (SQLException ex) {
@@ -98,8 +97,8 @@ public class FloraFacade {
             return new Object[0][0]; // Return an empty array on error
         }
     }
-     
-        public Object[][] getAllCustomers() {
+
+    public Object[][] getAllCustomers() {
         try {
             return database.getAllCustomers(); // Call the database method
         } catch (SQLException ex) {
@@ -109,8 +108,7 @@ public class FloraFacade {
     }
 
     // --------- Payment Management Methods -------- 
-
-        public boolean processPayment(String paymentMethod, double amount) {
+    public boolean processPayment(String paymentMethod, double amount) {
         PaymentStrategy paymentStrategy = null;
 
         // Determine the payment strategy
@@ -134,8 +132,7 @@ public class FloraFacade {
         return true; // Payment successful
     }
 
- // --------- Packages Management Methods -------- 
-
+    // --------- Packages Management Methods -------- 
     public boolean addPackageToDatabase(String name, String description, String services, String servicesPrices, double totalPrice) {
         try {
             database.insertNewPackage(name, description, services, servicesPrices, totalPrice);
@@ -154,9 +151,5 @@ public class FloraFacade {
             return new Object[0][0]; // Return an empty array on error
         }
     }
-
-   
-
- 
 
 }

@@ -32,7 +32,7 @@ public class HomeGUI {
         frame.add(packagesLabel);
 
         // Add "Booking" label (middle-left at the top)
-        JLabel bookingLabel = createLabel("Booking", Color.BLACK, 18);
+        JLabel bookingLabel = createLabel("Book", Color.BLACK, 18);
         bookingLabel.setBounds(900, 10, 150, 30); // Position independently
         frame.add(bookingLabel);
 
@@ -64,21 +64,21 @@ public class HomeGUI {
         packagesLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-  // Open the Packages Viewer for the desired package type
-        frame.dispose(); // Ensure this line is being executed
-        PackageViewerGUI packageViewer = new PackageViewerGUI("Wedding"); // Or dynamically determine the package type
-        packageViewer.showPackageWindow();
-        
+                // Open the Packages Viewer for the desired package type
+                frame.dispose(); // Ensure this line is being executed
+                PackageViewerGUI packageViewer = new PackageViewerGUI("Wedding"); // Or dynamically determine the package type
+                packageViewer.showPackageWindow();
+
             }
         });
 
         bookingLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-        frame.dispose(); // Ensure this line is being executed
-        BookHallGUI.showBookingPage(); // Open the booking page
+                frame.dispose(); // Ensure this line is being executed
+                BookHallGUI.showBookingPage(); // Open the booking page
             }
-            });
+        });
 
         // Add listeners for package buttons to show package details
         weddingPackageButton.addActionListener(createPackageButtonListener("Wedding"));

@@ -1,14 +1,10 @@
 package FloraWeddingHall.GUI;
 
 import FloraWeddingHall.system.BookingProxy;
-import FloraWeddingHall.system.Database;
 import FloraWeddingHall.system.FloraFacade;
 import FloraWeddingHall.system.PackageFactory;
-
 import javax.swing.*;
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class BookHallGUI {
 
@@ -107,14 +103,13 @@ public class BookHallGUI {
 
                 bookingfacade.createBooking(2, "Rafal@gmail.com", selectedPackage, selectedDate, paymentMethod); // customerId = 1 (example)
 //
-                    double price = getPriceForPackage(selectedPackage);
-                    bookingfacade.processPayment(paymentMethod, price);
-                    
-                
+                double price = getPriceForPackage(selectedPackage);
+                bookingfacade.processPayment(paymentMethod, price);
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage());
             }
-       });
+        });
         frame.setVisible(true);
     }
 

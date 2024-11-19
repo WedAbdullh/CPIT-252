@@ -36,7 +36,6 @@ public class BookingProxy implements Booking {
        //Delegates the actual database operation to RealBooking.
         if (realBooking == null) {
             realBooking = new RealBooking();
-            System.out.println("booking db");
         }
         realBooking.createBooking(customerId, username, PackageID, bookingDate, paymentMethod);
         } 
